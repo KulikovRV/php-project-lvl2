@@ -1,0 +1,13 @@
+{
+    "name": "hexlet/code",
+    "description": "my study project in Hexlet",
+    "authors": [
+        {
+            "name": "Roman Kulikov",
+            "email": "texasultra@mail.ru"
+        }
+    ],
+    "require": {
+        "docopt/docopt": "^1.0"
+    }
+}
