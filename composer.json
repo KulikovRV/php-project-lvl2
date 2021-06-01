@@ -1,6 +1,9 @@
 {
     "name": "hexlet/code",
     "description": "my study project in Hexlet",
+    "bin": [
+        "bin/gendiff"
+    ],
     "authors": [
         {
             "name": "Roman Kulikov",
