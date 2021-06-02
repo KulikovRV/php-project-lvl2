@@ -16,16 +16,18 @@ Generate diff
 Usage:
   gendiff (-h|--help)
   gendiff (-v|--version)
+  gendiff [--format <fmt>] <firstFile> <secondFile>
 
 Options:
   -h --help                     Show this screen
   -v --version                  Show version
+  --format <fmt>                Report format [default: stylish]
 
 DOC;
 
 require('/Users/kulikovroman/code-study/php-hexlet/php-project-lvl2/vendor/docopt/docopt/src/docopt.php');
 $params = array(
-    'version'=>'gendiff 1.0'
+    'version' => 'gendiff 1.0',
 );
 $args = Docopt::handle($doc, $params);
 foreach ($args as $k=>$v)
