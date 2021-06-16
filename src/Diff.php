@@ -28,29 +28,25 @@ function genDiff($pathToFile1, $pathToFile2): array
     $file1 = json_decode(file_get_contents($pathToFile1, true), true);
     $file2 = json_decode(file_get_contents($pathToFile2, true), true);
     $diff = [];
-    foreach ($file1 as $key1 => $item1) {
-        foreach ($file2 as $key2 => $item2) {
-            if ($key1 === $key2 && $item1 === $item2) {
-                $diff[$key1] = $item1;
-            } elseif ($key1 === $key2 && $item1 !== $item2) {
-                $newKey1 = "- $key1";
-                $newKey2 = "+ $key2";
-                $diff[$newKey1] = $item1;
-                $diff[$newKey2] = $item2;
-            } elseif ($key1 !== $key2) {
-                $newKey3 = "- $key1";
-                $diff[$newKey3] = $item1;
-            }
 
+    foreach ($file1 as $key => $value) {
+        if (array_key_exists($key, $file2) && $value === $file2[$key]) {
+            $diff[$key] = $value;
+        } elseif (array_key_exists($key, $file2) && $value !== $file2[$key]) {
+            $diff["- $key"] = $value;
+            $diff["+ $key"] = $file2[$key];
+        } elseif (!array_key_exists($key, $file2)) {
+            $diff["- $key"] = $value;
         }
     }
-    return $diff;
 
-//    return array_map(function ($item1, $item2) {
-//        if ($item1 === $item2) {
-//            return $item1;
-//        }
-//    }, $file1, $file2);
+    foreach ($file2 as $key => $value) {
+        if (!array_key_exists($key, $file1)) {
+            $diff["+ $key"] = $value;
+        }
+    }
+
+    return $diff;
 }
 
 $pathToFile1 = 'file1.json';
