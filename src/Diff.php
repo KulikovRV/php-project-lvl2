@@ -23,7 +23,7 @@ namespace Differ\Differ;
 
 use function Functional\if_else;
 
-function genDiff($pathToFile1, $pathToFile2): array
+function genDiff($pathToFile1, $pathToFile2)
 {
     $file1 = json_decode(file_get_contents($pathToFile1, true), true);
     $file2 = json_decode(file_get_contents($pathToFile2, true), true);
@@ -45,7 +45,7 @@ function genDiff($pathToFile1, $pathToFile2): array
             $diff["+ $key"] = $value;
         }
     }
-
+    ksort($diff);
     return $diff;
 }
 
