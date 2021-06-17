@@ -10,6 +10,8 @@ if (file_exists($autoloadPath1)) {
     require_once $autoloadPath2;
 }
 
+use function Differ\Differ\genDiff;
+
 $doc = <<<DOC
 Generate diff
 
@@ -30,5 +32,11 @@ $params = array(
     'version' => 'gendiff 1.0',
 );
 $args = Docopt::handle($doc, $params);
-foreach ($args as $k=>$v)
-    echo $k.': '.json_encode($v).PHP_EOL;
+$argsInArr = get_object_vars($args);
+$firstFile = $argsInArr['args']['<firstFile>'];
+$secondFile =  $argsInArr['args']['<secondFile>'];
+
+print_r(genDiff($firstFile, $secondFile));
+
+/*foreach ($args as $k=>$v)
+    echo $k.': '.json_encode($v).PHP_EOL;*/

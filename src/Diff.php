@@ -21,8 +21,6 @@ namespace Differ\Differ;
 //}
 
 
-use function Functional\if_else;
-
 function genDiff($pathToFile1, $pathToFile2)
 {
     $file1 = json_decode(file_get_contents($pathToFile1, true), true);
@@ -52,4 +50,4 @@ function genDiff($pathToFile1, $pathToFile2)
 $pathToFile1 = 'file1.json';
 $pathToFile2 = 'file2.json';
 
-print_r(genDiff($pathToFile1, $pathToFile2));
+//print_r(genDiff($pathToFile1, $pathToFile2));
