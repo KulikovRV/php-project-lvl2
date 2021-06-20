@@ -43,8 +43,9 @@ function genDiff($pathToFile1, $pathToFile2)
             $diff["+ $key"] = $value;
         }
     }
-    ksort($diff);
-    return $diff;
+    //ksort($diff);
+    return json_encode($diff, JSON_PRETTY_PRINT);
+    //return $diff;
 }
 
 $pathToFile1 = 'file1.json';
