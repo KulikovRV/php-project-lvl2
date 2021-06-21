@@ -35,8 +35,13 @@ $args = Docopt::handle($doc, $params);
 $argsInArr = get_object_vars($args);
 $firstFile = $argsInArr['args']['<firstFile>'];
 $secondFile =  $argsInArr['args']['<secondFile>'];
-//$result = genDiff($firstFile, $secondFile);
-echo(genDiff($firstFile, $secondFile));
+$result = genDiff($firstFile, $secondFile);
+//echo(genDiff($firstFile, $secondFile));
 
-//foreach ($result as $k=>$v)
-//    echo $k.': '.json_encode($v).PHP_EOL;
+//print_r(genDiff($firstFile,$secondFile));
+echo "{\n";
+foreach ($result as $k=>$v)
+    echo " $k".': '.$v.PHP_EOL;
+echo '}';
+
+// echo (json_encode($result, JSON_PRETTY_PRINT));
