@@ -1,6 +1,6 @@
 {
     "name": "kulikov-rv/gendiff",
-    "description": "my study project in Hexlet",
+    "description": "my second study project in Hexlet.io",
     "license": "MIT",
     "bin": [
         "bin/gendiff"
