@@ -88,7 +88,7 @@ function genDiff($pathToFile1, $pathToFile2)
     return $result;
 }
 
-$pathToFile1 = 'file1.json';
-$pathToFile2 = 'file2.json';
+//$pathToFile1 = 'file1.json';
+//$pathToFile2 = 'file2.json';
 
 //print_r(genDiff($pathToFile1, $pathToFile2));
