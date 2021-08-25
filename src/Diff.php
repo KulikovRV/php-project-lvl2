@@ -21,10 +21,13 @@ namespace Differ\Differ;
 //}
 // [proxy=> [value => 123...., staus => deleted]] ; вот такой пример если?)
 
-function genDiff($pathToFile1, $pathToFile2)
+/**
+ * @throws \JsonException
+ */
+function genDiff($pathToFile1, $pathToFile2): array
 {
-    $file1 = json_decode(file_get_contents($pathToFile1, true), true);
-    $file2 = json_decode(file_get_contents($pathToFile2, true), true);
+    $file1 = json_decode(file_get_contents($pathToFile1, true), true, 512, JSON_THROW_ON_ERROR);
+    $file2 = json_decode(file_get_contents($pathToFile2, true), true, 512, JSON_THROW_ON_ERROR);
     $diff = [];
 
     /*foreach ($file1 as $key => $value) {
