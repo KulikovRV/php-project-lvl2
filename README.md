@@ -4,6 +4,7 @@
 [![Actions Status](https://github.com/KulikovRV/php-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/KulikovRV/php-project-lvl2/actions)
 [![Actions Status](https://github.com/KulikovRV/php-project-lvl2/workflows/phpcs/badge.svg)](https://github.com/KulikovRV/php-project-lvl2/actions)
 
+[![Code Climate](https://codeclimate.com/github/hexlet-boilerplates/php-package/badges/gpa.svg)](https://codeclimate.com/github/hexlet-boilerplates/php-package)
 
 ### Demonstration
 [![asciicast](https://asciinema.org/a/430795.svg)](https://asciinema.org/a/430795)
