@@ -38,8 +38,9 @@ $secondFile =  $argsInArr['args']['<secondFile>'];
 $result = genDiff($firstFile, $secondFile);
 
 echo "{\n";
-foreach ($result as $k=>$v)
-    echo " $k".': '.$v.PHP_EOL;
+foreach ($result as $k=>$v) {
+    echo " $k" . ': ' . $v . PHP_EOL;
+}
 echo '}';
 
 // echo (json_encode($result, JSON_PRETTY_PRINT));
