@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ\Differ;
+namespace App\Differ;
 
 // - есть в первом файле, в во втором нет,
 // - одинаковые ключи, разные значения
