@@ -10,3 +10,7 @@ lint:
 test-coverage:
 	composer exec --verbose phpunit tests -- --coverage-clover build/logs/clover.xml
 
+make test:
+	composer exec --verbose phpunit tests
+
+
