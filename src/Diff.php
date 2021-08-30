@@ -72,17 +72,17 @@ function genDiff($pathToFile1, $pathToFile2): array
     foreach ($diff as $key => $value) {
         switch ($value) {
             case $value['status'] === 'saved':
-                $result["  $key:"] = $value['value'];
+                $result["  $key"] = $value['value'];
                 break;
             case $value['status'] === 'modified':
-                $result["- $key:"] = $value['old value'];
-                $result["+ $key:"] = $value['new value'];
+                $result["- $key"] = $value['old value'];
+                $result["+ $key"] = $value['new value'];
                 break;
             case $value['status'] === 'deleted':
-                $result["- $key:"] = $value['value'];
+                $result["- $key"] = $value['value'];
                 break;
             case $value['status'] === 'new':
-                $result["+ $key:"] = $value['value'];
+                $result["+ $key"] = $value['value'];
                 break;
         }
     }
