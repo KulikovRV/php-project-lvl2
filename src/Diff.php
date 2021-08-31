@@ -21,13 +21,16 @@ namespace App\Differ;
 //}
 // [proxy=> [value => 123...., staus => deleted]] ; вот такой пример если?)
 
-/**
- * @throws \JsonException
- */
+use Symfony\Component\Yaml\Yaml;
+
 function genDiff($pathToFile1, $pathToFile2): array
 {
-    $file1 = json_decode(file_get_contents($pathToFile1, true), true, 512, JSON_THROW_ON_ERROR);
-    $file2 = json_decode(file_get_contents($pathToFile2, true), true, 512, JSON_THROW_ON_ERROR);
+    $file1 = Yaml::parseFile($pathToFile1);
+    $file2 = Yaml::parseFile($pathToFile2);
+    var_dump($file1);
+    var_dump($file2);
+    //$file1 = json_decode(file_get_contents($pathToFile1, true), true, 512, JSON_THROW_ON_ERROR);
+    //$file2 = json_decode(file_get_contents($pathToFile2, true), true, 512, JSON_THROW_ON_ERROR);
     $diff = [];
 
     /*foreach ($file1 as $key => $value) {
@@ -90,8 +93,3 @@ function genDiff($pathToFile1, $pathToFile2): array
     //return json_encode($diff, JSON_PRETTY_PRINT);
     return $result;
 }
-
-//$pathToFile1 = 'file1.json';
-//$pathToFile2 = 'file2.json';
-
-//print_r(genDiff($pathToFile1, $pathToFile2));
