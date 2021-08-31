@@ -16,6 +16,13 @@ class DiffTest extends TestCase
     {
         $file1 = __DIR__ . "/fixtures/file1.json";
         $file2 = __DIR__ . "/fixtures/file2.json";
+        $file3 = __DIR__ . "/fixtures/file3.json";
+        $file4 = __DIR__ . "/fixtures/file4.json";
+        $file5 =  __DIR__ . "/fixtures/file5.yml";
+        $file6 =  __DIR__ . "/fixtures/file6.yml";
+        $file7 =  __DIR__ . "/fixtures/file7.yaml";
+        $emptyJson = __DIR__ . "/fixtures/empty.json";
+
         $result1 = [
             "- follow" => false,
             "  host" => "hexlet.io",
@@ -24,9 +31,6 @@ class DiffTest extends TestCase
             "+ timeout" => 20,
             "+ verbose" => true
         ];
-
-        $file3 = __DIR__ . "/fixtures/file3.json";
-        $file4 = __DIR__ . "/fixtures/file4.json";
         $result2 = [
             "- follow" => false,
             "+ follow" => true,
@@ -37,8 +41,6 @@ class DiffTest extends TestCase
             "  timeout" => 50,
             "+ state" => 777
         ];
-
-        $emptyJson = __DIR__ . "/fixtures/empty.json";
         $result3 = [
             "- follow" => false,
             "- host" => "hexlet.io",
@@ -54,12 +56,20 @@ class DiffTest extends TestCase
             "  timeout" => 50
         ];
 
-        // Сначала идет ожидаемое значение (expected)
-        // И только потом актуальное (actual)
+        //Сравниваем файлы с форматом json
         $this->assertEquals($result1, genDiff($file1, $file2));
         $this->assertEquals($result2, genDiff($file3, $file4));
         $this->assertEquals($result3, genDiff($file1, $emptyJson));
         $this->assertEquals($result4, genDiff($emptyJson, $emptyJson));
         $this->assertEquals($result5, genDiff($file1, $file1));
+
+        //Сравниваем файлы с форматом yml и yaml
+        $this->assertEquals($result1, genDiff($file5, $file6));
+        $this->assertEquals($result5, genDiff($file5, $file5));
+        $this->assertEquals($result1, genDiff($file7, $file6));
+
+        // Сравниваем файлы с форматом json и yaml/yml
+        $this->assertEquals($result5, genDiff($file1, $file5));
+        $this->assertEquals($result1, genDiff($file7, $file2));
     }
 }

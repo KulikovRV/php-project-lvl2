@@ -2,6 +2,8 @@
 
 namespace App\Differ;
 
+use function App\Parser\preparationOfFiles;
+
 // - есть в первом файле, в во втором нет,
 // - одинаковые ключи, разные значения
 // + появился во втором файле, уникальные данные
@@ -21,34 +23,11 @@ namespace App\Differ;
 //}
 // [proxy=> [value => 123...., staus => deleted]] ; вот такой пример если?)
 
-use Symfony\Component\Yaml\Yaml;
-
 function genDiff($pathToFile1, $pathToFile2): array
 {
-    $file1 = Yaml::parseFile($pathToFile1);
-    $file2 = Yaml::parseFile($pathToFile2);
-    var_dump($file1);
-    var_dump($file2);
-    //$file1 = json_decode(file_get_contents($pathToFile1, true), true, 512, JSON_THROW_ON_ERROR);
-    //$file2 = json_decode(file_get_contents($pathToFile2, true), true, 512, JSON_THROW_ON_ERROR);
+    $file1 = preparationOfFiles($pathToFile1);
+    $file2 = preparationOfFiles($pathToFile2);
     $diff = [];
-
-    /*foreach ($file1 as $key => $value) {
-        if (array_key_exists($key, $file2) && $value === $file2[$key]) {
-            $diff[$key] = $value;
-        } elseif (array_key_exists($key, $file2) && $value !== $file2[$key]) {
-            $diff["- $key"] = $value;
-            $diff["+ $key"] = $file2[$key];
-        } elseif (!array_key_exists($key, $file2)) {
-            $diff["- $key"] = $value;
-        }
-    }
-
-    foreach ($file2 as $key => $value) {
-        if (!array_key_exists($key, $file1)) {
-            $diff["+ $key"] = $value;
-        }
-    } */
 
     foreach ($file1 as $key => $value) {
         if (array_key_exists($key, $file2) && $value === $file2[$key]) {
@@ -69,6 +48,7 @@ function genDiff($pathToFile1, $pathToFile2): array
             $diff[$key] = ['value' => $value, 'status' => 'new'];
         }
     }
+
     ksort($diff);
 
     $result = [];
