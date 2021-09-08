@@ -22,6 +22,10 @@ class DiffTest extends TestCase
         $file6 =  __DIR__ . "/fixtures/file6.yml";
         $file7 =  __DIR__ . "/fixtures/file7.yaml";
         $emptyJson = __DIR__ . "/fixtures/empty.json";
+        $nestedFile1 = __DIR__ . "/fixtures/file-1-nested.json";
+        $nestedFile2 = __DIR__ . "/fixtures/file-2-nested.json";
+        $nestedFile3 = __DIR__ . "/fixtures/file-3-nested.yml";
+        $nestedFile4 = __DIR__ . "/fixtures/file-3-nested.yml";
 
         $result1 = [
             "- follow" => false,
@@ -56,6 +60,51 @@ class DiffTest extends TestCase
             "  timeout" => 50
         ];
 
+        $result6 = [
+            "common:" => [
+                "+ follow:" => false,
+                "setting1:" => "Value 1",
+                "- setting2:" => 200,
+                "- setting3:" => true,
+                "+ setting3:" => null,
+                "+ setting4:" => "blah blah",
+                "+ setting5:" => [
+                    "key5:" => "value5"
+                ],
+                "setting6:" => [
+                    "doge:" => [
+                        "- wow:" => "",
+                        "+ wow:" => "so much"
+                    ],
+                    "key:" => "value",
+                    "+ ops:" => "vops"
+                ],
+            ],
+            "group1:" => [
+                "- baz:" => "bas",
+                "+ baz:" => "bars",
+                "foo:" => "bar",
+                "- nest:" => [
+                    "key:" => "value"
+                ],
+                "+ nest:" => "str"
+            ],
+            "- group2:" => [
+                "abc:" => 12345,
+                "deep:" => [
+                    "id:" => 45
+                ],
+            ],
+            "+ group3:" => [
+                "deep:" => [
+                    "id:" => [
+                        "number:" => 45
+                    ],
+                ],
+                "fee:" => 100500
+            ]
+        ];
+
         //Сравниваем файлы с форматом json
         $this->assertEquals($result1, genDiff($file1, $file2));
         $this->assertEquals($result2, genDiff($file3, $file4));
@@ -71,5 +120,8 @@ class DiffTest extends TestCase
         // Сравниваем файлы с форматом json и yaml/yml
         $this->assertEquals($result5, genDiff($file1, $file5));
         $this->assertEquals($result1, genDiff($file7, $file2));
+
+        // Сравниваем файлы с вложенные структуры json
+        $this->assertEquals($result6, genDiff($nestedFile1, $nestedFile2));
     }
 }
