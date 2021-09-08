@@ -21,7 +21,7 @@ use function App\Parser\preparationOfFiles;
 //  + timeout: 20
 //  + verbose: true
 //}
-// [proxy=> [value => 123...., staus => deleted]] ; вот такой пример если?)
+// [proxy=> [value => 123...., status => deleted]] ; вот такой пример если?)
 
 function genDiff($pathToFile1, $pathToFile2): array
 {
@@ -30,28 +30,37 @@ function genDiff($pathToFile1, $pathToFile2): array
     $diff = [];
 
     foreach ($file1 as $key => $value) {
-        if (array_key_exists($key, $file2) && $value === $file2[$key]) {
-            $diff[$key] = ['value' => $value, 'status' => 'saved'];
-        } elseif (array_key_exists($key, $file2) && $value !== $file2[$key]) {
+        $isKeyExistsInFile2 = array_key_exists($key, $file2);
+
+        if ($isKeyExistsInFile2 && $value === $file2[$key]) {
+            $diff[$key] = [
+                'value' => $value,
+                'status' => 'saved'
+            ];
+        } elseif ($isKeyExistsInFile2 && $value !== $file2[$key]) {
             $diff[$key] = [
                 'old value' => $value,
                 'new value' => $file2[$key],
                 'status' => 'modified'
             ];
-        } elseif (!array_key_exists($key, $file2)) {
-            $diff[$key] = ['value' => $value, 'status' => 'deleted'];
+        } elseif (!$isKeyExistsInFile2) {
+            $diff[$key] = [
+                'value' => $value,
+                'status' => 'deleted'
+            ];
         }
     }
 
     foreach ($file2 as $key => $value) {
         if (!array_key_exists($key, $file1)) {
-            $diff[$key] = ['value' => $value, 'status' => 'new'];
+            $diff[$key] = [
+                'value' => $value,
+                'status' => 'new'
+            ];
         }
     }
-
     ksort($diff);
-
-    $result = [];
+    /*$result = [];
     foreach ($diff as $key => $value) {
         switch ($value) {
             case $value['status'] === 'saved':
@@ -68,8 +77,8 @@ function genDiff($pathToFile1, $pathToFile2): array
                 $result["+ $key"] = $value['value'];
                 break;
         }
-    }
+    }*/
 
     //return json_encode($diff, JSON_PRETTY_PRINT);
-    return $result;
+    return $diff;
 }

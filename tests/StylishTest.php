@@ -3,16 +3,17 @@ namespace App\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 use function App\Differ\genDiff;
+use function App\Formater\Stylish\stylish;
 
 // класс UtilsTest наследует класс TestCase
 // имя класса совпадает с именем файла
 
-class DiffTest extends TestCase
+class StylishTest extends TestCase
 {
     // Метод, функция определенная внутри класса
     // Должна начинаться со слова test
     // public – чтобы PHPUnit мог вызвать этот тест снаружи
-    public function testGenDiff(): void
+    public function testStylish(): void
     {
         $file1 = __DIR__ . "/fixtures/file1.json";
         $file2 = __DIR__ . "/fixtures/file2.json";
@@ -106,22 +107,22 @@ class DiffTest extends TestCase
         ];
 
         //Сравниваем файлы с форматом json
-        $this->assertEquals($result1, genDiff($file1, $file2));
-        $this->assertEquals($result2, genDiff($file3, $file4));
-        $this->assertEquals($result3, genDiff($file1, $emptyJson));
-        $this->assertEquals($result4, genDiff($emptyJson, $emptyJson));
-        $this->assertEquals($result5, genDiff($file1, $file1));
+        $this->assertEquals($result1, stylish(genDiff($file1, $file2)));
+        $this->assertEquals($result2, stylish(genDiff($file3, $file4)));
+        $this->assertEquals($result3, stylish(genDiff($file1, $emptyJson)));
+        $this->assertEquals($result4, stylish(genDiff($emptyJson, $emptyJson)));
+        $this->assertEquals($result5, stylish(genDiff($file1, $file1)));
 
         //Сравниваем файлы с форматом yml и yaml
-        $this->assertEquals($result1, genDiff($file5, $file6));
-        $this->assertEquals($result5, genDiff($file5, $file5));
-        $this->assertEquals($result1, genDiff($file7, $file6));
+        $this->assertEquals($result1, stylish(genDiff($file5, $file6)));
+        $this->assertEquals($result5, stylish(genDiff($file5, $file5)));
+        $this->assertEquals($result1, stylish(genDiff($file7, $file6)));
 
         // Сравниваем файлы с форматом json и yaml/yml
-        $this->assertEquals($result5, genDiff($file1, $file5));
-        $this->assertEquals($result1, genDiff($file7, $file2));
+        $this->assertEquals($result5, stylish(genDiff($file1, $file5)));
+        $this->assertEquals($result1, stylish(genDiff($file7, $file2)));
 
         // Сравниваем файлы с вложенные структуры json
-        $this->assertEquals($result6, genDiff($nestedFile1, $nestedFile2));
+        $this->assertEquals($result6, stylish(genDiff($nestedFile1, $nestedFile2)));
     }
 }

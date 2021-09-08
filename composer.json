@@ -25,7 +25,8 @@
     "autoload": {
         "files": [
             "src/Diff.php",
-            "src/Parser.php"
+            "src/Parser.php",
+            "src/formaters/Stylish.php"
         ]
     }
 }

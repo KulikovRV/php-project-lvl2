@@ -11,6 +11,7 @@ if (file_exists($autoloadPath1)) {
 }
 
 use function App\Differ\genDiff;
+use function App\Formater\Stylish\stylish;
 
 $doc = <<<DOC
 Generate diff
@@ -35,7 +36,8 @@ $args = Docopt::handle($doc, $params);
 $argsInArr = get_object_vars($args);
 $firstFile = $argsInArr['args']['<firstFile>'];
 $secondFile =  $argsInArr['args']['<secondFile>'];
-$result = genDiff($firstFile, $secondFile);
+$diff = genDiff($firstFile, $secondFile);
+$result = stylish($diff);
 
 echo "{\n";
 foreach ($result as $k=>$v) {
