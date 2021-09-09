@@ -4,6 +4,7 @@ namespace App\Differ\Tests;
 use PHPUnit\Framework\TestCase;
 use function App\Differ\genDiff;
 use function App\Formater\Stylish\stylish;
+use function App\Parser\preparationOfFiles;
 
 // класс UtilsTest наследует класс TestCase
 // имя класса совпадает с именем файла
@@ -15,18 +16,18 @@ class StylishTest extends TestCase
     // public – чтобы PHPUnit мог вызвать этот тест снаружи
     public function testStylish(): void
     {
-        $file1 = __DIR__ . "/fixtures/file1.json";
-        $file2 = __DIR__ . "/fixtures/file2.json";
-        $file3 = __DIR__ . "/fixtures/file3.json";
-        $file4 = __DIR__ . "/fixtures/file4.json";
-        $file5 =  __DIR__ . "/fixtures/file5.yml";
-        $file6 =  __DIR__ . "/fixtures/file6.yml";
-        $file7 =  __DIR__ . "/fixtures/file7.yaml";
-        $emptyJson = __DIR__ . "/fixtures/empty.json";
-        $nestedFile1 = __DIR__ . "/fixtures/file-1-nested.json";
-        $nestedFile2 = __DIR__ . "/fixtures/file-2-nested.json";
-        $nestedFile3 = __DIR__ . "/fixtures/file-3-nested.yml";
-        $nestedFile4 = __DIR__ . "/fixtures/file-3-nested.yml";
+        $file1 = preparationOfFiles(__DIR__ . "/fixtures/file1.json");
+        $file2 = preparationOfFiles(__DIR__ . "/fixtures/file2.json");
+        $file3 = preparationOfFiles(__DIR__ . "/fixtures/file3.json");
+        $file4 = preparationOfFiles(__DIR__ . "/fixtures/file4.json");
+        $file5 =  preparationOfFiles(__DIR__ . "/fixtures/file5.yml");
+        $file6 =  preparationOfFiles(__DIR__ . "/fixtures/file6.yml");
+        $file7 =  preparationOfFiles(__DIR__ . "/fixtures/file7.yaml");
+        $emptyJson = preparationOfFiles(__DIR__ . "/fixtures/empty.json");
+        $nestedFile1 = preparationOfFiles(__DIR__ . "/fixtures/file-1-nested.json");
+        $nestedFile2 = preparationOfFiles(__DIR__ . "/fixtures/file-2-nested.json");
+        $nestedFile3 = preparationOfFiles(__DIR__ . "/fixtures/file-3-nested.yml");
+        $nestedFile4 = preparationOfFiles(__DIR__ . "/fixtures/file-3-nested.yml");
 
         $result1 = [
             "- follow" => false,

@@ -23,12 +23,68 @@ use function App\Parser\preparationOfFiles;
 //}
 // [proxy=> [value => 123...., status => deleted]] ; вот такой пример если?)
 
+/*
+function downcaseFileNames($tree)
+{
+    $name = getName($tree);
+    $newMeta = getMeta($tree);
+
+    if (isFile($tree)) {
+        return mkfile(strtolower(getName($tree)), $newMeta);
+    }
+
+    $children = getChildren($tree);
+    $newChildren = array_map(fn($child) => downcaseFileNames($child), $children);
+    $newTree = mkdir($name, $newChildren, $newMeta);
+
+    return $newTree;
+}
+ */
+/*
 function genDiff($pathToFile1, $pathToFile2): array
 {
-    $file1 = preparationOfFiles($pathToFile1);
-    $file2 = preparationOfFiles($pathToFile2);
+    //$file1 = preparationOfFiles($pathToFile1);
+   // $file2 = preparationOfFiles($pathToFile2);
+    $file1 = $pathToFile1;
+    $file2 = $pathToFile2;
     $diff = [];
 
+    foreach ($file1 as $key => $value) {
+        if (!is_array($key)) {
+            $isKeyExistsInFile2 = array_key_exists($key, $file2);
+
+            if ($isKeyExistsInFile2 && $value === $file2[$key]) {
+                $diff[$key] = [
+                    'type' => 'children',
+                    'value' => $value,
+                    'status' => 'saved'
+                ];
+            } elseif ($isKeyExistsInFile2 && $value !== $file2[$key]) {
+                $diff[$key] = [
+                    'type' => 'children',
+                    'old value' => $value,
+                    'new value' => $file2[$key],
+                    'status' => 'modified'
+                ];
+            } elseif (!$isKeyExistsInFile2) {
+                $diff[$key] = [
+                    'type' => 'children',
+                    'value' => $value,
+                    'status' => 'deleted'
+                ];
+            }
+        }
+    }
+
+
+    return $diff;
+} */
+
+
+
+function genDiff($file1, $file2): array
+{
+    $diff = [];
     foreach ($file1 as $key => $value) {
         $isKeyExistsInFile2 = array_key_exists($key, $file2);
 
@@ -60,25 +116,7 @@ function genDiff($pathToFile1, $pathToFile2): array
         }
     }
     ksort($diff);
-    /*$result = [];
-    foreach ($diff as $key => $value) {
-        switch ($value) {
-            case $value['status'] === 'saved':
-                $result["  $key"] = $value['value'];
-                break;
-            case $value['status'] === 'modified':
-                $result["- $key"] = $value['old value'];
-                $result["+ $key"] = $value['new value'];
-                break;
-            case $value['status'] === 'deleted':
-                $result["- $key"] = $value['value'];
-                break;
-            case $value['status'] === 'new':
-                $result["+ $key"] = $value['value'];
-                break;
-        }
-    }*/
-
     //return json_encode($diff, JSON_PRETTY_PRINT);
     return $diff;
 }
+
