@@ -40,19 +40,27 @@ function downcaseFileNames($tree)
     return $newTree;
 }
  */
-/*
-function genDiff($pathToFile1, $pathToFile2): array
+
+function genDiff($file1, $file2): array
 {
-    //$file1 = preparationOfFiles($pathToFile1);
-   // $file2 = preparationOfFiles($pathToFile2);
-    $file1 = $pathToFile1;
-    $file2 = $pathToFile2;
     $diff = [];
 
-    foreach ($file1 as $key => $value) {
-        if (!is_array($key)) {
-            $isKeyExistsInFile2 = array_key_exists($key, $file2);
+    foreach ($file2 as $key => $value) {
+        if (!array_key_exists($key, $file1)) {
+            $diff[$key] = [
+                'value' => $value,
+                'status' => 'new'
+            ];
+        }
+    }
 
+    if (is_array($file1)) {
+        foreach ($file1 as $key => $value) {
+            if (is_array($key)) {
+                return genDiff($key, $file2);
+            }
+
+            $isKeyExistsInFile2 = array_key_exists($key, $file2);
             if ($isKeyExistsInFile2 && $value === $file2[$key]) {
                 $diff[$key] = [
                     'type' => 'children',
@@ -75,13 +83,11 @@ function genDiff($pathToFile1, $pathToFile2): array
             }
         }
     }
-
-
     return $diff;
-} */
+}
 
 
-
+/*
 function genDiff($file1, $file2): array
 {
     $diff = [];
@@ -119,4 +125,4 @@ function genDiff($file1, $file2): array
     //return json_encode($diff, JSON_PRETTY_PRINT);
     return $diff;
 }
-
+*/
