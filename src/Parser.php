@@ -4,19 +4,20 @@ namespace App\Parser;
 
 use Symfony\Component\Yaml\Yaml;
 
-function preparationOfFiles($pathToFile) : array
+function preparationOfFiles($pathToFile)
 {
     $pathPartsFile = pathinfo($pathToFile);
     $extension = $pathPartsFile['extension'];
-    $data = [];
+    $content = file_get_contents($pathToFile, true);
+    //$data = [];
 
     switch ($extension) {
         case $extension === 'json':
-            $data = json_decode(file_get_contents($pathToFile, true), true, 512, JSON_THROW_ON_ERROR);
+            $data = json_decode($content);
             break;
         case $extension === 'yml':
         case $extension === 'yaml':
-            $data = Yaml::parseFile($pathToFile);
+            $data = Yaml::parse($content, Yaml::PARSE_OBJECT_FOR_MAP);
             break;
     }
 

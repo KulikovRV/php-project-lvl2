@@ -22,5 +22,6 @@ function stylish($diff)
                 break;
         }
     }
-        return $result;
+        return json_encode($result);
+        //return $result;
 }

@@ -5,25 +5,6 @@ namespace App\Differ;
 use http\Header\Parser;
 use function App\Parser\preparationOfFiles;
 
-// - есть в первом файле, в во втором нет,
-// - одинаковые ключи, разные значения
-// + появился во втором файле, уникальные данные
-// + измененные данные
-// отсортированы по алфавиту
-// как реализовать плюс и минус ?
-// на выходе json ?
-// пока работаем с плоскими массивоми
-
-// {
-//  - follow: false
-//    host: hexlet.io
-//  - proxy: 123.234.53.22
-//  - timeout: 50
-//  + timeout: 20
-//  + verbose: true
-//}
-// [proxy=> [value => 123...., status => deleted]] ; вот такой пример если?)
-
 /*
 function downcaseFileNames($tree)
 {
@@ -90,19 +71,24 @@ function genDiff($file1, $file2): array
 */
 
 
-function genDiff($array1, $array2, &$diff = []): array
+function genDiff($array1, $array2, $diff = []): array
 {
+    $keys = array_keys(get_object_vars($array2));
+
+//    if (property_exists($array1, $key))
+
     if (is_array($array2)) {
         foreach ($array2 as $key2 => $value2) {
             if (array_key_exists($key2, $array1)) {
                 $diff[$key2] = [
                     'type' => 'node',
                     'status' => 'saved',
-                    'value' => $value2
+                    'value' => $value2,
+                    'children' => genDiff($array1[$key2], $value2, $diff),
                 ];
                 //var_dump($array1[$key2]);
                 //var_dump($value2);
-                return genDiff($array1[$key2], $value2, $diff);
+                $a= 1;
             }
 
             $diff[$key2] = [
@@ -134,5 +120,6 @@ function genDiff($array1, $array2, &$diff = []): array
     }
 
     ksort($diff);
-    var_dump($diff);
+
+    return $diff;
 }
