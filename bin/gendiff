@@ -37,6 +37,7 @@ $args = Docopt::handle($doc, $params);
 $argsInArr = get_object_vars($args);
 $firstFile = preparationOfFiles($argsInArr['args']['<firstFile>']);
 $secondFile =  preparationOfFiles($argsInArr['args']['<secondFile>']);
+//var_dump($secondFile);
 
 $diff = genDiff($firstFile, $secondFile);
 $result = stylish($diff);

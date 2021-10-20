@@ -70,56 +70,57 @@ function genDiff($file1, $file2): array
 }
 */
 
-
-function genDiff($array1, $array2, $diff = []): array
+function genDiff($file1, $file2)
 {
-    $keys = array_keys(get_object_vars($array2));
+    return iter($file1, $file2);
+}
 
-//    if (property_exists($array1, $key))
+function iter($array1, $array2, $diff = [])
+{
+    if (!is_array($array1)) {
+        return $array1;
+        /*return [
+            'status' => '...',
+            'value' => $array1
+        ];*/
+    }
 
-    if (is_array($array2)) {
-        foreach ($array2 as $key2 => $value2) {
-            if (array_key_exists($key2, $array1)) {
-                $diff[$key2] = [
-                    'type' => 'node',
-                    'status' => 'saved',
-                    'value' => $value2,
-                    'children' => genDiff($array1[$key2], $value2, $diff),
-                ];
-                //var_dump($array1[$key2]);
-                //var_dump($value2);
-                $a= 1;
-            }
+    if (!is_array($array2)) {
+        return $array2;
+        /*return [
+            'status' => '...',
+            'value' => $array2
+        ];*/
+    }
 
+    foreach ($array2 as $key2 => $value2) {
+        if (array_key_exists($key2, $array1)) {
             $diff[$key2] = [
-                'type' => 'node',
+                'status' => 'saved',
+                'value' => iter($array1[$key2], $value2, $diff)
+            ];
+        }
+
+        if (!array_key_exists($key2, $array1)) {
+            return $diff[$key2] = [
                 'status' => 'new',
                 'value' => $value2
+                //'value' => iter($value2, $value2, $diff)
             ];
-
-            /*if (!array_key_exists($key2, $array1)) {
-                $diff[$key2] = [
-                    'type' => 'node',
-                    'status' => 'new',
-                    'value' => $value2
-                ];
-            }*/
         }
     }
 
-    if (is_array($array1)) {
-        foreach ($array1 as $key1 => $value1) {
-            if (!array_key_exists($key1, $array2)) {
-                $diff[$key1] = [
-                    'type' => 'node',
-                    'status' => 'deleted',
-                    'value' => $value1
-                ];
-            }
+    foreach ($array1 as $key1 => $value1) {
+        if (!array_key_exists($key1, $array2)) {
+            $diff[$key1] = [
+                'status' => 'deleted',
+                'value' => $value1
+            ];
         }
     }
 
     ksort($diff);
-
+    var_dump($diff);
     return $diff;
 }
+
