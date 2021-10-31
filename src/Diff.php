@@ -10,17 +10,19 @@ function genDiff($file1, $file2)
 function iter($array1, $array2, $diff = [])
 {
     if (!is_array($array1)) {
-        return [
+        return $array1;
+        /*return [
             'status' => '...',
             'value' => $array1
-        ];
+        ];*/
     }
 
     if (!is_array($array2)) {
-        return [
+        return $array2;
+        /*return [
             'status' => '...',
             'value' => $array2
-        ];
+        ];*/
     }
 
     foreach ($array2 as $key2 => $value2) {
@@ -49,6 +51,7 @@ function iter($array1, $array2, $diff = [])
     }
 
     ksort($diff);
+    //var_dump($diff);
     return $diff;
 }
 
