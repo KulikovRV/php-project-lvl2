@@ -56,53 +56,56 @@ function iter1($array1, $array2, $diff = [])
     return $diff;
 }
 
-function iter2($array1, $array2, $diff = [])
+function iter2($array1, $array2)
 {
-    if (!is_array($array1)) {
-        return $array1;
-        /*return [
-            'status' => '...',
-            'value' => $array1
-        ];*/
-    }
-
-    if (!is_array($array2)) {
-        return $array2;
-        /*return [
-            'status' => '...',
-            'value' => $array2
-        ];*/
-    }
-
     $array1Keys = array_keys($array1);
     $array2Keys = array_keys($array2);
-    $uniqueKeys = array_intersect_key($array1Keys, $array2Keys);
+    $uniqueKeys = array_unique(array_merge($array1Keys, $array2Keys));
     ksort($uniqueKeys);
-    var_dump($uniqueKeys);
+    $uniqueKeys2 = array_flip($uniqueKeys);
 
-    foreach ($uniqueKeys as $key) {
-        if (array_key_exists($key, $array1) && array_key_exists($key, $array2)) {
-            $diff[$key] = [
-                'status' => 'saved',
-                'value' => iter2($array1[$key], $array2[$key], $diff)
-            ];
-        }
 
-        if (!array_key_exists($key, $array1) && array_key_exists($key, $array2)) {
-            $diff[$key] = [
-                'status' => 'new',
-                'value' => $array2[$key]
-            ];
-        }
+    $result = array_map(function ($key) use ($array1, $array2, $uniqueKeys) {
+        $key = $uniqueKeys[$key];
+        $value1 = $array1[$key] ?? null;
+        $value2 = $array2[$key] ?? null;
 
-        if (array_key_exists($key, $array1) && !array_key_exists($key, $array2)) {
-            $diff[$key] = [
+        if (!array_key_exists($key, $array2)) {
+            return [
                 'status' => 'deleted',
-                'value' => $array1[$key]
+                'value' => $value1
             ];
         }
-    }
 
-    return $diff;
+        if (!array_key_exists($key, $array1)) {
+            return [
+                'status' => 'new',
+                'value' => $value2
+            ];
+        }
+
+        if (is_array($value1) && is_array($value2)) {
+            return [
+                'status' => 'nested',
+                'value' => iter2($value1, $value2)
+            ];
+        }
+
+        if ($value1 !== $value2) {
+            return [
+                    'status' => 'modified',
+                    'old value' => $value1,
+                    'new value' => $value2
+            ];
+        }
+
+        return [
+            'status' => 'saved',
+            'value' => $value1
+        ];
+    }, $uniqueKeys2);
+
+//    var_dump($result);
+    return $result;
 }
 
