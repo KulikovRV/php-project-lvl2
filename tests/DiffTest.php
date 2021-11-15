@@ -114,5 +114,7 @@ class DiffTest extends TestCase
         ];
 
         $this->assertEquals($result1, genDiff($nestedFile1, $nestedFile4));
+        $this->assertEquals($result1, genDiff($nestedFile1, $nestedFile2));
+        $this->assertEquals($result1, genDiff($nestedFile3, $nestedFile4));
     }
 }
