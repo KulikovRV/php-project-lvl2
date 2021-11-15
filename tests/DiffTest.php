@@ -16,55 +16,42 @@ class DiffTest extends TestCase
 
         $result1 = [
             'common' => [
-                // 'type' => 'node',
-                'status' => 'saved',
+                'status' => 'nested',
                 'value' => [
                     'follow' => [
-                        // 'type' => 'children',
                         'status' => 'new',
                         'value' => false,
                     ],
                     'setting1' => [
-                        // 'type' => 'children',
                         'status' => 'saved',
                         'value' => 'Value 1'
                     ],
                     'setting2' => [
-                        // 'type' => 'children',
                         'status' => 'deleted',
                         'value' => 200
                     ],
                     'setting3' => [
-                        //'type' => 'children',
                         'status' => 'modified',
                         'old value' => true,
                         'new value' => null
                     ],
                     'setting4' => [
-                        //'type' => 'children',
                         'status' => 'new',
                         'value' => 'blah blah',
                     ],
                     'setting5' => [
-                        //'type' => 'node',
                         'status' => 'new',
                         'value' => [
-                            'key5' => [
-                                //'type' => 'children',
-                                'value' => 'value5',
-                            ]
+                            'key5' => 'value5'
                         ]
                     ],
                     'setting6' => [
-                        //'type' => 'node',
-                        'status' => 'saved',
+                        'status' => 'nested',
                         'value' => [
                             'doge' => [
-                                //'type' => 'node',
-                                'status' => 'saved',
+                                'status' => 'nested',
                                 'value' => [
                                     'wow' => [
-                                        //'type' => 'children',
                                         'status' => 'modified',
                                         'old value' => '',
                                         'new value' => 'so much'
@@ -72,12 +59,10 @@ class DiffTest extends TestCase
                                 ]
                             ],
                             'key' => [
-                                //'type' => 'children',
                                 'status' => 'saved',
                                 'value' => 'value'
                             ],
                             'ops' => [
-                                //'type' => 'children',
                                 'status' => 'new',
                                 'value' => 'vops'
                             ]
@@ -86,74 +71,44 @@ class DiffTest extends TestCase
                 ]
             ],
             'group1' => [
-                //'type' => 'node',
-                'status' => 'saved',
+                'status' => 'nested',
                 'value' => [
                     'baz' => [
-                        //'type' => 'children',
                         'status' => 'modified',
                         'old value' => 'bas',
                         'new value' => 'bars'
                     ],
                     'foo' => [
-                        //'type' => 'children',
                         'status' => 'saved',
                         'value' => 'bar'
                     ],
                     'nest' => [
-                        //'type' => 'node',
                         'status' => 'modified',
                         'old value' => [
-                            'key' => [
-                                //'type' => 'children',
-                                'value' => 'value'
-                            ]
+                            'key' => 'value'
                         ],
                         'new value' => 'str'
                     ]
                 ]
             ],
             'group2' => [
-                //'type' => 'node',
                 'status' => 'deleted',
                 'value' => [
-                    'abc' => [
-                        //'type' => 'children',
-                        'value' => 12345
-                    ],
+                    'abc' => 12345,
                     'deep' => [
-                        //'type' => 'node',
-                        'value' => [
-                            'id' => [
-                                //'type' => 'children',
-                                'value' => 45
-                            ]
-                        ]
+                        'id' => 45
                     ]
                 ]
             ],
             'group3' => [
-                //'type' => 'node',
                 'status' => 'new',
                 'value' => [
                     'deep' => [
-                        //'type' => 'node',
-                        'value' => [
-                            'id' => [
-                                //'type' => 'node',
-                                'value' => [
-                                    'number' => [
-                                        //'type' => 'children',
-                                        'value' => 45
-                                    ]
-                                ]
+                        'id' => [
+                            'number' => 45
                             ]
-                        ]
                     ],
-                    'fee' => [
-                        //'type' => 'children',
-                        'value' => 100500
-                    ]
+                    'fee' =>  100500
                 ]
             ]
         ];
