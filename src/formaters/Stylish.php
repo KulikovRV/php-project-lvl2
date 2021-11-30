@@ -6,7 +6,7 @@ namespace App\Formater\Stylish;
  * @throws \JsonException
  */
 
-function stylish($diff): bool|string
+function stylish($diff)
 {
 //    $result = [];
 //    foreach ($diff as $key => $value) {
@@ -30,35 +30,37 @@ function stylish($diff): bool|string
     $keys = array_keys($diff);
     ksort($keys);
     $keys2 = array_flip($keys);
-    $result = array_map(function ($key) use ($diff, $keys) {
-        $key = $keys[$key];
-        $value = $diff[$key] ?? null;
+    $result = array_map(function ($key1) use ($diff, $keys, $keys2) {
+        $key2 = $keys[$key1];
+        $value = $diff[$key2] ?? null;
 
         switch ($value) {
             case $value['status'] === 'nested':
-                return [
-//                    "  $key" => stylish($value['value'])
-                    "  $key" => stylish($value['value'])
-                ];
+                return stylish($value['value']);
+//                return [
+//                    "  $key2" => stylish($value['value'])
+//                ];
             case $value['status'] === 'saved':
                 return [
-                    "  $key" => $value['value']
+                    "  $key2" => $value['value']
                 ];
             case $value['status'] === 'modified':
                 return [
-                    "- $key" => $value['old value'],
-                    "+ $key" => $value['new value']
+                    "- $key2" => $value['old value'],
+                    "+ $key2" => $value['new value']
                 ];
             case $value['status'] === 'deleted':
+//                return $value['value'];
                 return [
-                    "- $key" => $value['value']
+                    "- $key2" => $value['value']
                 ];
             case $value['status'] === 'new':
+//                return $value['value'];
                 return [
-                    "+ $key" => $value['value'],
+                    "+ $key2" => $value['value'],
                 ];
         }
     }, $keys2);
-
+//    return $result;
         return json_encode($result, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
 }
