@@ -10,24 +10,10 @@ use function Functional\flatten;
 
 function stylish($diff)
 {
+//    var_dump($diff);
+//    exit();
     $tree = iter2($diff);
-//    $result = [];
-////    var_dump($tree);
-//    foreach ($tree as $key => $value) {
-//        if (is_array($value)) {
-//            foreach ($value as $key1 => $value2) {
-////                var_dump($key);
-////                var_dump(array_keys($value2));
-//                $newKey = array_keys($value2);
-//                var_dump($value2);
-//                $result[$key][$newKey[0]] = array_values($value2);
-//            }
-//        } else {
-//            $result[$key] = $value;
-//        }
-//    }
-      return $tree;
-//    return flatten($tree);
+    return $tree;
 }
 
 function iter($diff)
@@ -47,7 +33,9 @@ function iter($diff)
             case $value['status'] === 'nested':
                 foreach ($value['value'] as $value2) {
                     var_dump($value2);
-                    return iter($value2);
+//                    return iter($value2);
+                      return iter($value);
+
                 }
 //                return iter($value['value']);
 //                return [
@@ -66,7 +54,6 @@ function iter($diff)
 //                $keys2["- $key"] = $keys2[$key];
 //                unset($keys2[$key]);
 //                return $value['value'];
-
                 return [
                     "- $key" => $value['value']
                 ];
@@ -83,21 +70,9 @@ function iter($diff)
 
 function iter2($diff)
 {
-//    var_dump($diff);
-//    $keys = array_keys($diff);
-//    var_dump($keys);
-//    $keys2 = array_flip($keys);
-//    var_dump($keys2);
     $result = array_map(function ($key, $value) {
-//        var_dump($key);
-//        var_dump($value);
-//        var_dump($value_keys2);
-//        $key = $keys[$value];
-//        $value = $diff[$key] ?? null;
-//        var_dump($key);
-//        var_dump($diff);
-//        var_dump($value);
         if (!is_array($value)) {
+//            var_dump($value);
             return;
         }
         switch ($value) {
@@ -106,7 +81,8 @@ function iter2($diff)
 //                    var_dump($key);
                     if ($key !== "common") {
 //                        var_dump($key);
-//                        var_dump($value);
+//                        var_dump($value2);
+//                        exit();
                         return iter2($value2);
                     }
 //                    return iter2($value);
@@ -122,18 +98,13 @@ function iter2($diff)
             case $value['status'] === 'modified':
                 return [
                     "- $key" => $value['old value'],
-                    "+ $key" => $value['new value']
+                    "+ $key" => $value['value']
                 ];
             case $value['status'] === 'deleted':
-//                $keys2["- $key"] = $keys2[$key];
-//                unset($keys2[$key]);
-//                return $value['value'];
-
                 return [
                     "- $key" => $value['value']
                 ];
             case $value['status'] === 'new':
-//                return $value['value'];
                 return [
                     "+ $key" => $value['value'],
                 ];
