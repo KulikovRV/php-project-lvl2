@@ -23,7 +23,7 @@ class StylishTest extends TestCase
 
         $diff = genDiff($firstFile, $secondFile);
         $result = stylish($diff);
-        var_dump($result);
+        //var_dump($result);
 
         $expects = file_get_contents($pathResult);
         $this->assertNotEmpty($expects);

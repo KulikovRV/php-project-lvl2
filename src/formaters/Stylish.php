@@ -8,9 +8,53 @@ namespace App\Formater\Stylish;
 
 function stylish($diff)
 {
-    $tree = iter2($diff);
+    $tree = iter3($diff);
     return $tree;
 }
+
+function toString($value)
+{
+    return trim(var_export($value, true), "'");
+}
+
+function iter3($diff, string $replacer = ' ', int $spacesCount = 4) : string
+{
+    $iter = function ($currentValue, $depth) use (&$iter, $replacer, $spacesCount) {
+        if (!is_array($currentValue)) {
+            return toString($currentValue);
+        }
+
+        $indentSize = $depth * $spacesCount;
+        $currentIndent = str_repeat($replacer, $indentSize);
+        $bracketIndent = str_repeat($replacer, $indentSize - $spacesCount);
+
+//        $lines = array_map(
+//            fn($key, $val) => "{$currentIndent}{$key}: {$iter($val, $depth + 1)}",
+//            array_keys($currentValue),
+//            $currentValue
+//        );
+
+
+        $lines = array_map(function ($key, $val) use ($depth, $iter, $currentIndent, $currentValue) {
+            if ($key === 'status') {
+                switch ($key) {
+                    case $val === 'deleted':
+                        var_dump($key);
+                        return "{$currentIndent}'- '{$key}:{$iter($currentValue['value'], $depth + 1)}";
+                }
+
+            }
+            return "{$currentIndent}{$key}: {$iter($val, $depth + 1)}";
+            }, array_keys($currentValue), $currentValue);
+
+        $result = ['{', ...$lines, "{$bracketIndent}}"];
+        return implode("\n", $result);
+    };
+
+    return $iter($diff, 1);
+}
+
+
 
 function iter($diff)
 {
