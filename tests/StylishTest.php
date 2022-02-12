@@ -17,13 +17,13 @@ class StylishTest extends TestCase
 
         $this->assertFileExists($path1);
         $this->assertFileExists($path2);
+        $this->assertFileExists($pathResult);
 
         $firstFile = preparationOfFiles($path1);
         $secondFile =  preparationOfFiles($path2);
 
         $diff = genDiff($firstFile, $secondFile);
         $result = stylish($diff);
-        //var_dump($result);
 
         $expects = file_get_contents($pathResult);
         $this->assertNotEmpty($expects);

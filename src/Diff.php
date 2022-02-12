@@ -46,7 +46,7 @@ function iter($array1, $array2): array
             return [
                     'status' => 'modified',
                     'old value' => $value1,
-                    'value' => $value2
+                    'new value' => $value2
             ];
         }
 

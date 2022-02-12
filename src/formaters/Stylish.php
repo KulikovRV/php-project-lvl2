@@ -8,7 +8,7 @@ namespace App\Formater\Stylish;
 
 function stylish($diff)
 {
-    $tree = iter3($diff);
+    $tree = format($diff);
     return $tree;
 }
 
@@ -17,17 +17,48 @@ function toString($value)
     return trim(var_export($value, true), "'");
 }
 
+// В format надо использовать обход похожий на iter3
+// Использовать тот же вариант с замыканием iter, только сделать поправку на отступы, они не нужны
+// Задача состоит в добавлении + или - ключам, так же можно сразу сделать вид key => value
+// реализацию key => value мы можем сделать и в iter3
+// когда format будет отрабатывать, мы его запихнем в stylish и будем отдавать iter3 вместо diff
+// уже iter3 будет делать строку со всеми отступами
+// внутри замыкания iter нужен switch
+// сначала попробовать на плоской структуре, потом уже вложенной
+// написать тесты для плоской, а потом вложенной структуры
+// посмотреть свой тест StylishTest.php
+// обход в глубину в iter3 нужен для отступов, в format он не пригодиться
+
+
+function format($diff) : array
+{
+    $iter = function ($currentValue) use (&$iter) {
+        if (!is_array($currentValue)) {
+            // тут switch ?
+            return $currentValue;
+        }
+
+
+    };
+
+    return $iter($diff);
+}
+
 function iter3($diff, string $replacer = ' ', int $spacesCount = 4) : string
 {
+    // замыкание
     $iter = function ($currentValue, $depth) use (&$iter, $replacer, $spacesCount) {
         if (!is_array($currentValue)) {
+            // тут switch ?
             return toString($currentValue);
         }
 
+        // в format это не надо
         $indentSize = $depth * $spacesCount;
         $currentIndent = str_repeat($replacer, $indentSize);
         $bracketIndent = str_repeat($replacer, $indentSize - $spacesCount);
 
+        // кажется оно нужно для format
 //        $lines = array_map(
 //            fn($key, $val) => "{$currentIndent}{$key}: {$iter($val, $depth + 1)}",
 //            array_keys($currentValue),
@@ -39,7 +70,6 @@ function iter3($diff, string $replacer = ' ', int $spacesCount = 4) : string
             if ($key === 'status') {
                 switch ($key) {
                     case $val === 'deleted':
-                        var_dump($key);
                         return "{$currentIndent}'- '{$key}:{$iter($currentValue['value'], $depth + 1)}";
                 }
 
