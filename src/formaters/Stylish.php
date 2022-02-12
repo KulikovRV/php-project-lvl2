@@ -9,7 +9,14 @@ namespace App\Formater\Stylish;
 function stylish($diff)
 {
     $tree = format($diff);
-    return $tree;
+    $result = [];
+    foreach ($tree as $key => $val) {
+        foreach ($val as $key2 => $val2) {
+            $result[$key2] = $val2;
+        }
+    }
+    ksort($result);
+    return $result;
 }
 
 function toString($value)
@@ -34,11 +41,35 @@ function format($diff) : array
 {
     $iter = function ($currentValue) use (&$iter) {
         if (!is_array($currentValue)) {
-            // тут switch ?
             return $currentValue;
         }
 
-
+        $lines = array_map(
+            function ($key, $val) {
+                switch ($val) {
+                    case $val['status'] === 'saved':
+                        return [
+                            "  $key:" => $val['value']
+                        ];
+                    case $val['status'] === 'modified':
+                        return [
+                            "- $key:" => $val['old value'],
+                            "+ $key:" => $val['new value']
+                        ];
+                    case $val['status'] === 'deleted':
+                        return [
+                            "- $key:" => $val['value']
+                        ];
+                    case $val['status'] === 'new':
+                        return [
+                            "+ $key:" => $val['value'],
+                        ];
+                }
+            },
+            array_keys($currentValue),
+            $currentValue
+        );
+        return $lines;
     };
 
     return $iter($diff);

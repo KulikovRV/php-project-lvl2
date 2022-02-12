@@ -37,7 +37,7 @@ class StylishTest2 extends TestCase
 
         $flatArrayExpects = [
             "- follow:" => false,
-            "host:" => "hexlet.io",
+            "  host:" => "hexlet.io",
             "- proxy:" => "123.234.53.22",
             "- timeout:" => 50,
             "+ timeout:" => 20,
