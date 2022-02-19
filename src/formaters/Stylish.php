@@ -12,7 +12,7 @@ namespace App\Formater\Stylish;
 function stylish($diff)
 {
     $tree = format($diff);
-    var_dump($tree);
+//    var_dump($tree);
     $result = [];
     // Распаковка массива
     foreach ($tree as $key => $val) {
@@ -20,7 +20,8 @@ function stylish($diff)
             $result[$key2] = $val2;
         }
     }
-    ksort($tree);
+    ksort($result);
+//    var_dump($result);
     return $result;
 
 }
@@ -37,11 +38,16 @@ function format($diff) : array
             return $currentValue;
         }
 
+//        $arrayKeys = array_flip(array_keys($currentValue));
+//        var_dump($arrayKeys);
         $lines = array_map(
             function ($key, $val) use ($iter) {
                 switch ($val) {
                     case $val['status'] === 'nested':
-                        return $iter($val['value']);
+//                        return $iter($val['value']);
+                        return [
+                            "$key" => $iter($val['value'])
+                        ];
                     case $val['status'] === 'saved':
                         return [
                             "  $key:" => $val['value']
@@ -61,9 +67,11 @@ function format($diff) : array
                         ];
                 }
             },
+//            $arrayKeys,
             array_keys($currentValue),
             $currentValue
         );
+        var_dump([...$lines]);
         return $lines;
     };
 
