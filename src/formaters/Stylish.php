@@ -12,18 +12,38 @@ namespace App\Formater\Stylish;
 function stylish($diff)
 {
     $tree = format($diff);
-//    var_dump($tree);
-    $result = [];
+//    $result = [];
     // Распаковка массива
-    foreach ($tree as $key => $val) {
-        foreach ($val as $key2 => $val2) {
-            $result[$key2] = $val2;
-        }
-    }
-    ksort($result);
+//    var_dump($tree);
+//    foreach ($tree as $key => $val) {
+//        foreach ($val as $key2 => $val2) {
+//            $result[$key2] = $val2;
+//        }
+//    }
+    ksort($tree);
 //    var_dump($result);
-    return $result;
+    $result1 = unPacking($tree);
+    var_dump($result1);
+    return $result1;
 
+}
+
+function unPacking($array)
+{
+    $result = [];
+    $iter = function ($item) use (&$iter, &$result) {
+        if (!is_array($item)) {
+            return $item;
+        }
+
+        foreach ($item as $key => $value) {
+            if (is_int($key)) {
+                $result[$key] = $iter($value);
+            }
+        }
+    };
+    $iter($array);
+    return $result;
 }
 
 function toString($value): string
@@ -38,13 +58,12 @@ function format($diff) : array
             return $currentValue;
         }
 
-//        $arrayKeys = array_flip(array_keys($currentValue));
-//        var_dump($arrayKeys);
         $lines = array_map(
             function ($key, $val) use ($iter) {
                 switch ($val) {
                     case $val['status'] === 'nested':
 //                        return $iter($val['value']);
+//                        var_dump($val);
                         return [
                             "$key" => $iter($val['value'])
                         ];
@@ -67,11 +86,9 @@ function format($diff) : array
                         ];
                 }
             },
-//            $arrayKeys,
             array_keys($currentValue),
             $currentValue
         );
-        var_dump([...$lines]);
         return $lines;
     };
 
