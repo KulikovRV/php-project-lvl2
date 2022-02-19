@@ -12,6 +12,7 @@ namespace App\Formater\Stylish;
 function stylish($diff)
 {
     $tree = format($diff);
+//    var_dump($tree);
 //    $result = [];
     // Распаковка массива
 //    var_dump($tree);
@@ -38,6 +39,11 @@ function unPacking($array)
 
         foreach ($item as $key => $value) {
             if (is_int($key)) {
+                $result[] = $iter($value);
+//                $iter($value);
+            }
+
+            if (!is_int($key)) {
                 $result[$key] = $iter($value);
             }
         }
