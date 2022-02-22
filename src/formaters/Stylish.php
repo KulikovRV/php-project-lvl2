@@ -2,6 +2,8 @@
 
 namespace App\Formater\Stylish;
 
+use function Functional\flatten;
+
 /**
  * @throws \JsonException
  */
@@ -23,8 +25,8 @@ function stylish($diff)
 //    }
     ksort($tree);
 //    var_dump($result);
+    //    var_dump($result1);
     $result1 = unPacking($tree);
-    var_dump($result1);
     return $result1;
 
 }
@@ -38,17 +40,21 @@ function unPacking($array)
         }
 
         foreach ($item as $key => $value) {
-            if (is_int($key)) {
-                $result[] = $iter($value);
-//                $iter($value);
+            if (!is_int($key)) {
+                $result[$key] = $value;
+                continue;
             }
 
-            if (!is_int($key)) {
-                $result[$key] = $iter($value);
+            if (is_array($value)) {
+//                $result[] = $iter($value);
+                $iter($value);
             }
+
+
         }
     };
     $iter($array);
+    var_dump($result);
     return $result;
 }
 
