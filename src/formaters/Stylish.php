@@ -27,7 +27,10 @@ function stylish($diff)
 //    var_dump($result);
     //    var_dump($result1);
     $result1 = unPacking($tree);
-    return $result1;
+    var_dump($result1);
+    $acc = [];
+    $res = unPacking2($result1, $acc);
+    return $res;
 
 }
 
@@ -44,18 +47,34 @@ function unPacking($array)
                 $result[$key] = $value;
                 continue;
             }
-
             if (is_array($value)) {
 //                $result[] = $iter($value);
                 $iter($value);
             }
-
-
         }
     };
     $iter($array);
-    var_dump($result);
+//    var_dump($result);
     return $result;
+}
+
+function unPacking2($array, &$acc, $prevKey = null)
+{
+    if (!is_array($array)) {
+        return;
+    }
+
+    foreach($array as $key => $value) {
+        if (is_numeric($key)) {
+            if (!is_null($acc[$prevKey])) {
+                $res = array_merge($acc[$prevKey], $value);
+            } else {
+                $res = $value;
+            }
+            $acc[$prevKey] = $res;
+        }
+        unPacking2($value, $acc, $key);
+    }
 }
 
 function toString($value): string
