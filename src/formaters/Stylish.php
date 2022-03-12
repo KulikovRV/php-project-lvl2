@@ -14,12 +14,15 @@ use function Functional\flatten;
 function stylish($diff)
 {
     $treeWitStatus = addStatusView($diff);
-    ksort($treeWitStatus);
-    $unpackedTree = unPacking1($treeWitStatus);
-    $resultingTree = [];
-    unPacking2($unpackedTree, $resultingTree);
+//    ksort($treeWitStatus);
+    var_dump($treeWitStatus);
+    return $treeWitStatus;
+//    $unpackedTree = unPacking1($treeWitStatus);
+//    $resultingTree = [];
+//    unPacking2($unpackedTree, $resultingTree);
+//    var_dump($resultingTree);
 //    var_dump(convertArrayToString($resultingTree));
-    return convertArrayToString($resultingTree);
+//    return convertArrayToString($resultingTree);
 }
 
 function unPacking1($array)
@@ -62,7 +65,7 @@ function unPacking2($array, &$acc, $prevKey = null)
     }
 }
 
-function addStatusView($diff) : array
+function addStatusView($diff)
 {
     $iter = function ($currentValue) use (&$iter) {
         if (!is_array($currentValue)) {
@@ -74,24 +77,24 @@ function addStatusView($diff) : array
                 switch ($val) {
                     case $val['status'] === 'nested':
                         return [
-                            "$key" => $iter($val['value'])
+                            $val['key'] => $iter($val['value'])
                         ];
                     case $val['status'] === 'saved':
                         return [
-                            "  $key" => $val['value']
+                            "  " . $val['key'] => $val['value']
                         ];
                     case $val['status'] === 'modified':
                         return [
-                            "- $key" => $val['old value'],
-                            "+ $key" => $val['new value']
+                            "- " . $val['key'] => $val['old value'],
+                            "+ " . $val['key'] => $val['new value']
                         ];
                     case $val['status'] === 'deleted':
                         return [
-                            "- $key" => $val['value']
+                            "- " . $val['key'] => $val['value']
                         ];
                     case $val['status'] === 'new':
                         return [
-                            "+ $key" => $val['value'],
+                            "+ " . $val['key'] => $val['value'],
                         ];
                 }
             },
@@ -132,3 +135,27 @@ function convertArrayToString($diff, string $replacer = ' ', int $spacesCount = 
 
     return $iter($diff, 1);
 }
+
+//Александр Пупышев10:08
+//            return [
+//                'key' => $key,
+//                'type' => 'deleted',
+//                'value' => $value1,
+//            ];
+//Александр Пупышев10:11
+//                'key' => $key,
+//                'type' => 'nested',
+//                'children' => buildDiff($value1, $value2)
+//Александр Пупышев10:13
+//case 'nested':
+//            $mapped = array_map(
+//                fn($child) => iter($child, $depth + 1),
+//                $children
+//            );
+//            $result = implode("\n", $mapped);
+//            return "{$indent}  ${node['key']}: {\n{$result}\n{$indent}  }";
+//Александр Пупышев10:14
+//            return "{$indent}+ {$node['key']}: {$formattedValue}";
+//
+//        case 'added':
+//            return "{$indent}+ {$node['key']}: {$formattedValue}";

@@ -23,6 +23,7 @@ function iter($array1, $array2): array
 
         if (!array_key_exists($key, $array2)) {
             return [
+                'key' => $key,
                 'status' => 'deleted',
                 'value' => $value1
             ];
@@ -30,6 +31,7 @@ function iter($array1, $array2): array
 
         if (!array_key_exists($key, $array1)) {
             return [
+                'key' => $key,
                 'status' => 'new',
                 'value' => $value2
             ];
@@ -37,6 +39,7 @@ function iter($array1, $array2): array
 
         if (is_array($value1) && is_array($value2)) {
             return [
+                'key' => $key,
                 'status' => 'nested',
                 'value' => iter($value1, $value2)
             ];
@@ -44,6 +47,7 @@ function iter($array1, $array2): array
 
         if ($value1 !== $value2) {
             return [
+                    'key' => $key,
                     'status' => 'modified',
                     'old value' => $value1,
                     'new value' => $value2
@@ -51,6 +55,7 @@ function iter($array1, $array2): array
         }
 
         return [
+            'key' => $key,
             'status' => 'saved',
             'value' => $value1
         ];
