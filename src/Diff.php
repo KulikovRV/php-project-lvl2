@@ -4,7 +4,6 @@ namespace App\Differ;
 
 function genDiff($file1, $file2): array
 {
-
     return iter($file1, $file2);
 }
 

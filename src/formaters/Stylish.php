@@ -14,15 +14,20 @@ use function Functional\flatten;
 function stylish($diff)
 {
     $treeWitStatus = addStatusView($diff);
+    $unpackedTree = unPacking1($treeWitStatus);
 //    ksort($treeWitStatus);
-    var_dump($treeWitStatus);
-    return $treeWitStatus;
-//    $unpackedTree = unPacking1($treeWitStatus);
+//    var_dump($unpackedTree);
+    return convertArrayToString($unpackedTree);
 //    $resultingTree = [];
-//    unPacking2($unpackedTree, $resultingTree);
+//    unPacking2($treeWitStatus, $resultingTree);
 //    var_dump($resultingTree);
 //    var_dump(convertArrayToString($resultingTree));
 //    return convertArrayToString($resultingTree);
+}
+
+function isAssociative($array): bool
+{
+    return in_array(false, array_map('is_numeric', array_keys($array)));
 }
 
 function unPacking1($array)
@@ -38,6 +43,7 @@ function unPacking1($array)
                 $result[$key] = $value;
                 continue;
             }
+
             if (is_array($value)) {
                 $iter($value);
             }
