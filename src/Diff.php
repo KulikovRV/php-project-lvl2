@@ -4,7 +4,11 @@ namespace App\Differ;
 
 function genDiff($file1, $file2): array
 {
-    return iter($file1, $file2);
+//    return iter($file1, $file2);
+    return [
+    'status' => 'nested',
+    'value' => iter($file1, $file2),
+    ];
 }
 
 function iter($array1, $array2): array

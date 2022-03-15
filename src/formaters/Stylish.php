@@ -2,7 +2,7 @@
 
 namespace App\Formater\Stylish;
 
-use function Functional\flatten;
+use function Functional\pick;
 
 /**
  * @throws \JsonException
@@ -13,21 +13,85 @@ use function Functional\flatten;
 
 function stylish($diff)
 {
-    $treeWitStatus = addStatusView($diff);
-    $unpackedTree = unPacking1($treeWitStatus);
-//    ksort($treeWitStatus);
-//    var_dump($unpackedTree);
-    return convertArrayToString($unpackedTree);
-//    $resultingTree = [];
-//    unPacking2($treeWitStatus, $resultingTree);
-//    var_dump($resultingTree);
-//    var_dump(convertArrayToString($resultingTree));
-//    return convertArrayToString($resultingTree);
+    return iter($diff);
 }
 
-function isAssociative($array): bool
+function iter($node, $intend = 1) : string
 {
-    return in_array(false, array_map('is_numeric', array_keys($array)));
+    $children = null;
+
+    if (isset($node['status']) && $node['status'] === 'nested') {
+        $children = pick($node, 'value');
+    }
+//    todo добавить отступы
+    $space = ' ';
+
+    $oldValue = pick($node, 'old value');
+    $newValue = pick($node, 'new value');
+    $savedValue = pick($node, 'value');
+
+    switch ($node['status']) {
+        case 'nested':
+            $mapped = array_map(fn($child) => iter($child), $children);
+            $result = implode("\n", $mapped);
+            return "\n{$result}\n";
+        case 'saved':
+            $formattedValue = stringify($savedValue);
+            return "$space {$node['key']}:  $formattedValue";
+        case 'deleted':
+            $formattedValue = stringify($savedValue);
+            return "$space - {$node['key']}:  $formattedValue";
+        case 'new':
+            $formattedValue = stringify($savedValue);
+            return "$space + {$node['key']}:  $formattedValue";
+        case 'modified':
+            $formattedValue1 = stringify($oldValue);
+            $formattedValue2 = stringify($newValue);
+            $lines =  [
+                "{$space}- {$node['key']}: {$formattedValue1}",
+                "{$space}+ {$node['key']}: {$formattedValue2}"
+            ];
+            return implode("\n", $lines);
+        default:
+            throw new \Exception("Unknown type: {$node['type']}");
+    }
+}
+
+function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
+{
+    if (is_bool($diff)) {
+        return $diff ? 'true' : 'false';
+    }
+
+    if (is_null($diff)) {
+        return 'null';
+    }
+
+    $iter = function ($currentValue, $depth) use (&$iter, $replacer, $spacesCount) {
+        if (!is_array($currentValue)) {
+            return toString($currentValue);
+        }
+
+        $indentSize = $depth * $spacesCount;
+        $currentIndent = str_repeat($replacer, $indentSize);
+        $bracketIndent = str_repeat($replacer, $indentSize - $spacesCount);
+
+        $lines = array_map(
+            fn($key, $val) => "{$currentIndent}{$key}: {$iter($val, $depth + 1)}",
+            array_keys($currentValue),
+            $currentValue
+        );
+
+        $result = ['{', ...$lines, "{$bracketIndent}}"];
+        return implode("\n", $result);
+    };
+
+    return $iter($diff, 1);
+}
+
+function toString($value): string
+{
+    return trim(var_export($value, true), "'");
 }
 
 function unPacking1($array)
@@ -112,56 +176,3 @@ function addStatusView($diff)
 
     return $iter($diff);
 }
-
-function toString($value): string
-{
-    return trim(var_export($value, true), "'");
-}
-
-function convertArrayToString($diff, string $replacer = ' ', int $spacesCount = 4) : string
-{
-    $iter = function ($currentValue, $depth) use (&$iter, $replacer, $spacesCount) {
-        if (!is_array($currentValue)) {
-            return toString($currentValue);
-        }
-
-        $indentSize = $depth * $spacesCount;
-        $currentIndent = str_repeat($replacer, $indentSize);
-        $bracketIndent = str_repeat($replacer, $indentSize - $spacesCount);
-
-        $lines = array_map(
-            fn($key, $val) => "{$currentIndent}{$key}: {$iter($val, $depth + 1)}",
-            array_keys($currentValue),
-            $currentValue
-        );
-
-        $result = ['{', ...$lines, "{$bracketIndent}}"];
-        return implode("\n", $result);
-    };
-
-    return $iter($diff, 1);
-}
-
-//Александр Пупышев10:08
-//            return [
-//                'key' => $key,
-//                'type' => 'deleted',
-//                'value' => $value1,
-//            ];
-//Александр Пупышев10:11
-//                'key' => $key,
-//                'type' => 'nested',
-//                'children' => buildDiff($value1, $value2)
-//Александр Пупышев10:13
-//case 'nested':
-//            $mapped = array_map(
-//                fn($child) => iter($child, $depth + 1),
-//                $children
-//            );
-//            $result = implode("\n", $mapped);
-//            return "{$indent}  ${node['key']}: {\n{$result}\n{$indent}  }";
-//Александр Пупышев10:14
-//            return "{$indent}+ {$node['key']}: {$formattedValue}";
-//
-//        case 'added':
-//            return "{$indent}+ {$node['key']}: {$formattedValue}";
