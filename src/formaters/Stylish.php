@@ -94,85 +94,44 @@ function toString($value): string
     return trim(var_export($value, true), "'");
 }
 
-function unPacking1($array)
-{
-    $result = [];
-    $iter = function ($item) use (&$iter, &$result) {
-        if (!is_array($item)) {
-            return $item;
-        }
-
-        foreach ($item as $key => $value) {
-            if (!is_int($key)) {
-                $result[$key] = $value;
-                continue;
-            }
-
-            if (is_array($value)) {
-                $iter($value);
-            }
-        }
-    };
-    $iter($array);
-    return $result;
-}
-
-function unPacking2($array, &$acc, $prevKey = null)
-{
-    if (!is_array($array)) {
-        return;
-    }
-    foreach ($array as $key => $value) {
-        if (is_numeric($key)) {
-            if (array_key_exists($prevKey, $acc)) {
-                $res = array_merge($acc[$prevKey], $value);
-            } else {
-                $res = $value;
-            }
-            $acc[$prevKey] = $res;
-        }
-        unPacking2($value, $acc, $key);
-    }
-}
-
-function addStatusView($diff)
-{
-    $iter = function ($currentValue) use (&$iter) {
-        if (!is_array($currentValue)) {
-            return $currentValue;
-        }
-
-        $lines = array_map(
-            function ($key, $val) use ($iter) {
-                switch ($val) {
-                    case $val['status'] === 'nested':
-                        return [
-                            $val['key'] => $iter($val['value'])
-                        ];
-                    case $val['status'] === 'saved':
-                        return [
-                            "  " . $val['key'] => $val['value']
-                        ];
-                    case $val['status'] === 'modified':
-                        return [
-                            "- " . $val['key'] => $val['old value'],
-                            "+ " . $val['key'] => $val['new value']
-                        ];
-                    case $val['status'] === 'deleted':
-                        return [
-                            "- " . $val['key'] => $val['value']
-                        ];
-                    case $val['status'] === 'new':
-                        return [
-                            "+ " . $val['key'] => $val['value'],
-                        ];
-                }
-            },
-            array_keys($currentValue),
-            $currentValue
-        );
-        return $lines;
-    };
-
-    return $iter($diff);
-}
+//function addStatusView($diff)
+//{
+//    $iter = function ($currentValue) use (&$iter) {
+//        if (!is_array($currentValue)) {
+//            return $currentValue;
+//        }
+//
+//        $lines = array_map(
+//            function ($key, $val) use ($iter) {
+//                switch ($val) {
+//                    case $val['status'] === 'nested':
+//                        return [
+//                            $val['key'] => $iter($val['value'])
+//                        ];
+//                    case $val['status'] === 'saved':
+//                        return [
+//                            "  " . $val['key'] => $val['value']
+//                        ];
+//                    case $val['status'] === 'modified':
+//                        return [
+//                            "- " . $val['key'] => $val['old value'],
+//                            "+ " . $val['key'] => $val['new value']
+//                        ];
+//                    case $val['status'] === 'deleted':
+//                        return [
+//                            "- " . $val['key'] => $val['value']
+//                        ];
+//                    case $val['status'] === 'new':
+//                        return [
+//                            "+ " . $val['key'] => $val['value'],
+//                        ];
+//                }
+//            },
+//            array_keys($currentValue),
+//            $currentValue
+//        );
+//        return $lines;
+//    };
+//
+//    return $iter($diff);
+//}
