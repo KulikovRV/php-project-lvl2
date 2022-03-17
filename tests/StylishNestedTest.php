@@ -31,7 +31,7 @@ class StylishNestedTest extends TestCase
         $fourthFile =  preparationOfFiles($path4);
 
         $diff1 = genDiff($thirdFile, $fourthFile);
-        $result1 = stylish($diff1);
+//        $result1 = stylish($diff1);
 
         $diff2 = genDiff($firstFile, $secondFile);
         $result2 = stylish($diff2);

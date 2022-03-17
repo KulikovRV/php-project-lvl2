@@ -8,9 +8,6 @@ use function Functional\pick;
  * @throws \JsonException
  */
 
-// Добавить в diff новый статус 'root' для самого верхнего уровня
-// после этого будет новый case в format
-
 function stylish($diff)
 {
     return iter($diff);
@@ -23,6 +20,7 @@ function iter($node, $intend = 1) : string
     if (isset($node['status']) && $node['status'] === 'nested') {
         $children = pick($node, 'value');
     }
+
 //    todo добавить отступы
     $space = ' ';
 
@@ -34,10 +32,13 @@ function iter($node, $intend = 1) : string
         case 'nested':
             $mapped = array_map(fn($child) => iter($child), $children);
             $result = implode("\n", $mapped);
-            return "\n{$result}\n";
+            if (isset($node['key'])) {
+                return "$space {$node['key']}: {\n{$result}\n$space}";
+            }
+            return "{\n$space {$result}\n}";
         case 'saved':
             $formattedValue = stringify($savedValue);
-            return "$space {$node['key']}:  $formattedValue";
+            return "$space   {$node['key']}:  $formattedValue";
         case 'deleted':
             $formattedValue = stringify($savedValue);
             return "$space - {$node['key']}:  $formattedValue";
@@ -48,8 +49,8 @@ function iter($node, $intend = 1) : string
             $formattedValue1 = stringify($oldValue);
             $formattedValue2 = stringify($newValue);
             $lines =  [
-                "{$space}- {$node['key']}: {$formattedValue1}",
-                "{$space}+ {$node['key']}: {$formattedValue2}"
+                "$space - {$node['key']}: {$formattedValue1}",
+                "$space + {$node['key']}: {$formattedValue2}"
             ];
             return implode("\n", $lines);
         default:
