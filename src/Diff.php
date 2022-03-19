@@ -2,6 +2,8 @@
 
 namespace App\Differ;
 
+use function Functional\sort;
+
 function genDiff($file1, $file2): array
 {
 //    return iter($file1, $file2);
@@ -18,6 +20,7 @@ function iter($array1, $array2): array
     $uniqueKeys = array_unique(array_merge($array1Keys, $array2Keys));
     ksort($uniqueKeys);
     $uniqueKeys2 = array_flip($uniqueKeys);
+    $sortedKeys = sort($uniqueKeys2, fn ($left, $right) => strcmp($left, $right));
 
     $result = array_map(function ($key) use ($array1, $array2, $uniqueKeys) {
         $key = $uniqueKeys[$key];
@@ -62,7 +65,7 @@ function iter($array1, $array2): array
             'status' => 'saved',
             'value' => $value1
         ];
-    }, $uniqueKeys2);
+    }, $sortedKeys);
 
     return $result;
 }

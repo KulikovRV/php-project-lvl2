@@ -13,7 +13,7 @@ function stylish($diff)
     return iter($diff);
 }
 
-function iter($node, $intend = 1) : string
+function iter($node, $depth = 1) : string
 {
     $children = null;
 
@@ -22,7 +22,7 @@ function iter($node, $intend = 1) : string
     }
 
 //    todo добавить отступы
-    $space = ' ';
+    $space = buildIndent($depth);
 
     $oldValue = pick($node, 'old value');
     $newValue = pick($node, 'new value');
@@ -30,7 +30,7 @@ function iter($node, $intend = 1) : string
 
     switch ($node['status']) {
         case 'nested':
-            $mapped = array_map(fn($child) => iter($child), $children);
+            $mapped = array_map(fn($child) => iter($child, $depth + 1), $children);
             $result = implode("\n", $mapped);
             if (isset($node['key'])) {
                 return "$space {$node['key']}: {\n{$result}\n$space}";
@@ -38,13 +38,13 @@ function iter($node, $intend = 1) : string
             return "{\n$space {$result}\n}";
         case 'saved':
             $formattedValue = stringify($savedValue);
-            return "$space   {$node['key']}:  $formattedValue";
+            return "$space   {$node['key']}: $formattedValue";
         case 'deleted':
             $formattedValue = stringify($savedValue);
-            return "$space - {$node['key']}:  $formattedValue";
+            return "$space - {$node['key']}: $formattedValue";
         case 'new':
             $formattedValue = stringify($savedValue);
-            return "$space + {$node['key']}:  $formattedValue";
+            return "$space + {$node['key']}: $formattedValue";
         case 'modified':
             $formattedValue1 = stringify($oldValue);
             $formattedValue2 = stringify($newValue);
@@ -72,10 +72,19 @@ function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
         if (!is_array($currentValue)) {
             return toString($currentValue);
         }
+//        $closeBracketIndent = buildIndent($depth);
+//        $keys = array_keys(get_object_vars($value));
+//        $data = array_map(function ($key) use ($value, $depth): string {
+//            $dataIndent = buildIndent($depth + 1);
+//            $formattedValue = stringify($value->$key, $depth + 1);
+//            return "{$dataIndent}  {$key}: {$formattedValue}";
+//        }, $keys);
+//        $indentSize = $depth * $spacesCount;
+//        $currentIndent = str_repeat($replacer, $indentSize);
+//        $bracketIndent = str_repeat($replacer, $indentSize - $spacesCount);
 
-        $indentSize = $depth * $spacesCount;
-        $currentIndent = str_repeat($replacer, $indentSize);
-        $bracketIndent = str_repeat($replacer, $indentSize - $spacesCount);
+        $bracketIndent = buildIndent($depth);
+        $currentIndent = buildIndent($depth + 1);
 
         $lines = array_map(
             fn($key, $val) => "{$currentIndent}{$key}: {$iter($val, $depth + 1)}",
@@ -93,6 +102,11 @@ function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
 function toString($value): string
 {
     return trim(var_export($value, true), "'");
+}
+
+function buildIndent(int $depth, int $spacesCount = 4): string
+{
+    return str_repeat(' ', $depth * $spacesCount - 2);
 }
 
 //function addStatusView($diff)
