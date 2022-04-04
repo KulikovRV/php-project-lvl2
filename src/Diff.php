@@ -6,7 +6,6 @@ use function Functional\sort;
 
 function genDiff($file1, $file2): array
 {
-//    return iter($file1, $file2);
     return [
         'status' => 'nested',
         'value' => iter($file1, $file2),
