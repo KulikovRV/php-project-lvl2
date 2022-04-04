@@ -8,6 +8,16 @@ use function Functional\pick;
  * @throws \JsonException
  */
 
+function toString($value): string
+{
+    return trim(var_export($value, true), "'");
+}
+
+function buildIndent(int $depth, int $spacesCount = 2): string
+{
+    return str_repeat(' ', $depth * $spacesCount - 2);
+}
+
 function stylish($diff)
 {
     return iter($diff);
@@ -38,7 +48,7 @@ function iter($node, $depth = 1) : string
             return "{\n$space {$result}\n}";
         case 'saved':
             $formattedValue = stringify($savedValue);
-            return "$space   {$node['key']}: $formattedValue";
+            return "$space  {$node['key']}: $formattedValue";
         case 'deleted':
             $formattedValue = stringify($savedValue);
             return "$space - {$node['key']}: $formattedValue";
@@ -72,16 +82,6 @@ function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
         if (!is_array($currentValue)) {
             return toString($currentValue);
         }
-//        $closeBracketIndent = buildIndent($depth);
-//        $keys = array_keys(get_object_vars($value));
-//        $data = array_map(function ($key) use ($value, $depth): string {
-//            $dataIndent = buildIndent($depth + 1);
-//            $formattedValue = stringify($value->$key, $depth + 1);
-//            return "{$dataIndent}  {$key}: {$formattedValue}";
-//        }, $keys);
-//        $indentSize = $depth * $spacesCount;
-//        $currentIndent = str_repeat($replacer, $indentSize);
-//        $bracketIndent = str_repeat($replacer, $indentSize - $spacesCount);
 
         $bracketIndent = buildIndent($depth);
         $currentIndent = buildIndent($depth + 1);
@@ -98,55 +98,3 @@ function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
 
     return $iter($diff, 1);
 }
-
-function toString($value): string
-{
-    return trim(var_export($value, true), "'");
-}
-
-function buildIndent(int $depth, int $spacesCount = 4): string
-{
-    return str_repeat(' ', $depth * $spacesCount - 2);
-}
-
-//function addStatusView($diff)
-//{
-//    $iter = function ($currentValue) use (&$iter) {
-//        if (!is_array($currentValue)) {
-//            return $currentValue;
-//        }
-//
-//        $lines = array_map(
-//            function ($key, $val) use ($iter) {
-//                switch ($val) {
-//                    case $val['status'] === 'nested':
-//                        return [
-//                            $val['key'] => $iter($val['value'])
-//                        ];
-//                    case $val['status'] === 'saved':
-//                        return [
-//                            "  " . $val['key'] => $val['value']
-//                        ];
-//                    case $val['status'] === 'modified':
-//                        return [
-//                            "- " . $val['key'] => $val['old value'],
-//                            "+ " . $val['key'] => $val['new value']
-//                        ];
-//                    case $val['status'] === 'deleted':
-//                        return [
-//                            "- " . $val['key'] => $val['value']
-//                        ];
-//                    case $val['status'] === 'new':
-//                        return [
-//                            "+ " . $val['key'] => $val['value'],
-//                        ];
-//                }
-//            },
-//            array_keys($currentValue),
-//            $currentValue
-//        );
-//        return $lines;
-//    };
-//
-//    return $iter($diff);
-//}
