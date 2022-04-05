@@ -13,13 +13,10 @@ function preparationOfFiles($pathToFile)
 
     switch ($extension) {
         case $extension === 'json':
-            $data = json_decode($content, associative: true);
-            break;
+            return json_decode($content, associative: true);
         case $extension === 'yml':
         case $extension === 'yaml':
-            //$data = Yaml::parse($content, Yaml::PARSE_OBJECT_FOR_MAP);
-            $data = Yaml::parse($content);
-            break;
+            return Yaml::parse($content);
     }
 
     return $data;

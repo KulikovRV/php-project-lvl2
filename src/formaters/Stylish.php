@@ -45,19 +45,19 @@ function iter($node, $depth = 1) : string
             return "{$space}  ${node['key']}: {\n{$result}\n{$space}  }";
         case 'saved':
             $formattedValue = stringify($savedValue);
-            return "$space   {$node['key']}: $formattedValue";
+            return "$space  {$node['key']}: $formattedValue";
         case 'deleted':
             $formattedValue = stringify($savedValue);
-            return "$space - {$node['key']}: $formattedValue";
+            return "$space- {$node['key']}: $formattedValue";
         case 'new':
-            $formattedValue = stringify($savedValue);
-            return "$space + {$node['key']}: $formattedValue";
+            $formattedValue = stringify($savedValue, 4);
+            return "$space+ {$node['key']}: $formattedValue";
         case 'modified':
             $formattedValue1 = stringify($oldValue);
             $formattedValue2 = stringify($newValue);
             $lines =  [
-                "$space - {$node['key']}: {$formattedValue1}",
-                "$space + {$node['key']}: {$formattedValue2}"
+                "$space- {$node['key']}: {$formattedValue1}",
+                "$space+ {$node['key']}: {$formattedValue2}"
             ];
             return implode("\n", $lines);
         default:
@@ -84,7 +84,7 @@ function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
         $currentIndent = buildIndent($depth + 1);
 
         $lines = array_map(
-            fn($key, $val) => "{$currentIndent}{$key}: {$iter($val, $depth + 1)}",
+            fn($key, $val) => "  {$currentIndent}{$key}: {$iter($val, $depth + 1)}",
             array_keys($currentValue),
             $currentValue
         );
