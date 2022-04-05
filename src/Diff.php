@@ -4,18 +4,18 @@ namespace App\Differ;
 
 use function Functional\sort;
 use function App\Parser\preparationOfFiles;
-use function App\Formater\Stylish\stylish;
+use function App\Formatters\getFormatter;
 
-function genDiff($file1, $file2): string
+function genDiff($file1, $file2, $format): string
 {
     $data1 = preparationOfFiles($file1);
     $data2 = preparationOfFiles($file2);
     $diff = buildTree($data1, $data2);
-    return stylish($diff);
+    return getFormatter($diff, $format);
 }
 
-
-function buildTree($file1, $file2) {
+function buildTree($file1, $file2)
+{
     return [
         'status' => 'root',
         'value' => iter($file1, $file2),

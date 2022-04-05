@@ -26,7 +26,8 @@
         "files": [
             "src/Diff.php",
             "src/Parser.php",
-            "src/formaters/Stylish.php"
+            "src/formatters/Stylish.php",
+            "src/Formatters.php"
         ]
     }
 }

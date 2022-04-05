@@ -17,9 +17,8 @@ class StylishFlatTest extends TestCase
         $this->assertFileExists($path4);
         $this->assertFileExists($pathResult);
 
-        $flatResult = genDiff($path3, $path4);
+        $flatResult = genDiff($path3, $path4, 'stylish');
         $expects1 = file_get_contents($pathResult);
-
         $this->assertEquals($expects1, $flatResult);
     }
 }
