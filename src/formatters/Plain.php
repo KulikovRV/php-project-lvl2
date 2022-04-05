@@ -1,6 +1,7 @@
 <?php
+namespace App\Formater\Plain;
 
-function plain()
+function plain($diff)
 {
-
+    return 'Hello!';
 }
