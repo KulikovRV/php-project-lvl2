@@ -4,8 +4,6 @@ namespace App\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 use function App\Differ\genDiff;
-use function App\Formater\Stylish\stylish;
-use function App\Parser\preparationOfFiles;
 
 class StylishNestedTest extends TestCase
 {
@@ -19,13 +17,14 @@ class StylishNestedTest extends TestCase
         $this->assertFileExists($path1);
         $this->assertFileExists($path2);
 
-        $firstFile = preparationOfFiles($path1);
-        $secondFile =  preparationOfFiles($path2);
+//        $firstFile = preparationOfFiles($path1);
+//        $secondFile =  preparationOfFiles($path2);
 
-        $diff = genDiff($firstFile, $secondFile);
-        $result = stylish($diff);
+//        $diff = genDiff($firstFile, $secondFile);
+//        $result = stylish($diff);
 
         $expects1 = file_get_contents($pathResult);
+        $result = genDiff($path1, $path2);
 
         $this->assertEquals($expects1, $result);
     }
