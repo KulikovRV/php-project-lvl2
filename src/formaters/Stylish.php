@@ -8,16 +8,6 @@ use function Functional\pick;
  * @throws \JsonException
  */
 
-function toString($value): string
-{
-    return trim(var_export($value, true), "'");
-}
-
-function buildIndent(int $depth, int $spacesCount = 2): string
-{
-    return str_repeat(' ', $depth * $spacesCount - 2);
-}
-
 function stylish($diff)
 {
     return iter($diff);
@@ -27,7 +17,7 @@ function iter($node, $depth = 1) : string
 {
     $children = null;
 
-    if (isset($node['status']) && $node['status'] === 'nested') {
+    if (isset($node['status']) && in_array($node['status'], ['root', 'nested'])) {
         $children = pick($node, 'value');
     }
 
@@ -39,16 +29,23 @@ function iter($node, $depth = 1) : string
     $savedValue = pick($node, 'value');
 
     switch ($node['status']) {
-        case 'nested':
-            $mapped = array_map(fn($child) => iter($child, $depth + 1), $children);
+        case 'root':
+            $mapped = array_map(
+                fn($child) => iter($child, $depth),
+                $children
+            );
             $result = implode("\n", $mapped);
-            if (isset($node['key'])) {
-                return "$space {$node['key']}: {\n{$result}\n$space}";
-            }
-            return "{\n$space {$result}\n}";
+            return "{\n{$result}\n}";
+        case 'nested':
+            $mapped = array_map(
+                fn($child) => iter($child, $depth + 1),
+                $children
+            );
+            $result = implode("\n", $mapped);
+            return "{$space}  ${node['key']}: {\n{$result}\n{$space}  }";
         case 'saved':
             $formattedValue = stringify($savedValue);
-            return "$space  {$node['key']}: $formattedValue";
+            return "$space   {$node['key']}: $formattedValue";
         case 'deleted':
             $formattedValue = stringify($savedValue);
             return "$space - {$node['key']}: $formattedValue";
@@ -92,9 +89,19 @@ function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
             $currentValue
         );
 
-        $result = ['{', ...$lines, "{$bracketIndent}}"];
+        $result = ['{', ...$lines, "{$bracketIndent}  }"];
         return implode("\n", $result);
     };
 
     return $iter($diff, 1);
+}
+
+function toString($value): string
+{
+    return trim(var_export($value, true), "'");
+}
+
+function buildIndent(int $depth, int $spacesCount = 4): string
+{
+    return str_repeat(' ', $depth * $spacesCount - 2);
 }

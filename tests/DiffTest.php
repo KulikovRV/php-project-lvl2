@@ -15,7 +15,7 @@ class DiffTest extends TestCase
         $nestedFile4 = preparationOfFiles(__DIR__ . "/fixtures/file-4-nested.yaml");
 
         $result1 = [
-            'status'=> 'nested',
+            'status'=> 'root',
             'value' => [
                 0 => [
                     'key' => 'common',

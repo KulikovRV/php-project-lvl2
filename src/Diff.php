@@ -7,7 +7,7 @@ use function Functional\sort;
 function genDiff($file1, $file2): array
 {
     return [
-        'status' => 'nested',
+        'status' => 'root',
         'value' => iter($file1, $file2),
     ];
 }
@@ -17,12 +17,9 @@ function iter($array1, $array2): array
     $array1Keys = array_keys($array1);
     $array2Keys = array_keys($array2);
     $uniqueKeys = array_unique(array_merge($array1Keys, $array2Keys));
-    ksort($uniqueKeys);
-    $uniqueKeys2 = array_flip($uniqueKeys);
-    $sortedKeys = sort($uniqueKeys2, fn ($left, $right) => strcmp($left, $right));
+    $sortedKeys = sort($uniqueKeys, fn ($left, $right) => strcmp($left, $right));
 
-    $result = array_map(function ($key) use ($array1, $array2, $uniqueKeys) {
-        $key = $uniqueKeys[$key];
+    $result = array_map(function ($key) use ($array1, $array2) {
         $value1 = $array1[$key] ?? null;
         $value2 = $array2[$key] ?? null;
 
