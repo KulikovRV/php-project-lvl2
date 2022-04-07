@@ -9,10 +9,27 @@ class DiffTest extends TestCase
 {
     public function testDiff(): void
     {
-        $nestedFile1 = preparationOfFiles(__DIR__ . "/fixtures/file-1-nested.json");
-        $nestedFile2 = preparationOfFiles(__DIR__ . "/fixtures/file-2-nested.json");
-        $nestedFile3 = preparationOfFiles(__DIR__ . "/fixtures/file-3-nested.yml");
-        $nestedFile4 = preparationOfFiles(__DIR__ . "/fixtures/file-4-nested.yaml");
+        $stylishFormat = 'stylish';
+        $plainFormat = 'plain';
+
+        $pathToNestedFile1 = __DIR__ . "/fixtures/file-1-nested.json";
+        $pathToNestedFile2 = __DIR__ . "/fixtures/file-2-nested.json";
+        $pathToNestedFile3 = __DIR__ . "/fixtures/file-3-nested.yml";
+        $pathToNestedFile4 = __DIR__ . "/fixtures/file-4-nested.yaml";
+        $nestedPathResult =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
+
+        $this->assertEquals($nestedPathResult, genDiff($pathToNestedFile1, $pathToNestedFile4, $stylishFormat));
+        $this->assertEquals($nestedPathResult, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
+        $this->assertEquals($nestedPathResult, genDiff($pathToNestedFile3, $pathToNestedFile4, $stylishFormat));
+
+        $pathToFlatFile1 = __DIR__ . '/fixtures/file1.json';
+        $pathToFlatFile2 = __DIR__ . '/fixtures/file2.json';
+        $flatPathResult =  file_get_contents(__DIR__ . '/fixtures/resultStylish3.txt');
+        $this->assertEquals($flatPathResult, genDiff($pathToFlatFile1, $pathToFlatFile2, $stylishFormat));
+
+        $plainPathResult =  file_get_contents(__DIR__ . '/fixtures/resultPlain.txt');
+        $this->assertEquals($plainPathResult, genDiff($pathToNestedFile1, $pathToNestedFile2, 'plain'));
+
 
         $result1 = [
             'status'=> 'root',
@@ -133,9 +150,5 @@ class DiffTest extends TestCase
                 ]
             ]
         ];
-
-        $this->assertEquals($result1, genDiff($nestedFile1, $nestedFile4));
-        $this->assertEquals($result1, genDiff($nestedFile1, $nestedFile2));
-        $this->assertEquals($result1, genDiff($nestedFile3, $nestedFile4));
     }
 }

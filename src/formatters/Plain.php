@@ -3,5 +3,11 @@ namespace App\Formater\Plain;
 
 function plain($diff)
 {
-    return 'Hello!';
+    return 1;
+    return implode("\n", iter($diff, ''));
+}
+
+function iter($node)
+{
+
 }

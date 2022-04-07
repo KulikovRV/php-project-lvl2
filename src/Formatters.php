@@ -6,7 +6,7 @@ namespace App\Formatters;
 use function App\Formater\Stylish\stylish;
 use function App\Formater\Plain\plain;
 
-function getFormatter($diff, $format)
+function getFormatter($diff, $format): string
 {
     switch ($format) {
         case 'stylish':

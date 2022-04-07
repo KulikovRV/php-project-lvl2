@@ -14,11 +14,11 @@ function genDiff($file1, $file2, $format): string
     return getFormatter($diff, $format);
 }
 
-function buildTree($file1, $file2)
+function buildTree($data1, $data2)
 {
     return [
         'status' => 'root',
-        'value' => iter($file1, $file2),
+        'value' => iter($data1, $data2),
     ];
 }
 
