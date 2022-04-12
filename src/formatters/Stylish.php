@@ -13,7 +13,7 @@ function stylish($diff)
     return iter($diff);
 }
 
-function iter($node, $depth = 1) : string
+function iter($node, $depth = 1): string
 {
     $children = null;
 
@@ -65,7 +65,7 @@ function iter($node, $depth = 1) : string
     }
 }
 
-function stringify($diff, string $replacer = ' ', int $spacesCount = 4) : string
+function stringify($diff, string $replacer = ' ', int $spacesCount = 4): string
 {
     if (is_bool($diff)) {
         return $diff ? 'true' : 'false';

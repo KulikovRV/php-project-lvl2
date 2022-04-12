@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Formatters;
 
 use function App\Formater\Json\renderJson;
