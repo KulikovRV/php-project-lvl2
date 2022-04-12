@@ -35,7 +35,7 @@ function iter($node, $depth = 1) : string
                 $children
             );
             $result = implode("\n", $mapped);
-            return "{\n{$result}\n}";
+            return "{$result}\n";
         case 'nested':
             $mapped = array_map(
                 fn($child) => iter($child, $depth + 1),
@@ -61,7 +61,7 @@ function iter($node, $depth = 1) : string
             ];
             return implode("\n", $lines);
         default:
-            throw new \Exception("Unknown type: {$node['type']}");
+            throw new \Exception("Unknown type: {$node['status']}");
     }
 }
 
