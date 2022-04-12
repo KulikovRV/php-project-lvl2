@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
@@ -11,25 +12,28 @@ class DiffTest extends TestCase
     {
         $stylishFormat = 'stylish';
         $plainFormat = 'plain';
+        $jsonFormat = 'json';
 
         $pathToNestedFile1 = __DIR__ . "/fixtures/file-1-nested.json";
         $pathToNestedFile2 = __DIR__ . "/fixtures/file-2-nested.json";
         $pathToNestedFile3 = __DIR__ . "/fixtures/file-3-nested.yml";
         $pathToNestedFile4 = __DIR__ . "/fixtures/file-4-nested.yaml";
-        $nestedPathResult =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
+        $nestedResult =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
 
-        $this->assertEquals($nestedPathResult, genDiff($pathToNestedFile1, $pathToNestedFile4, $stylishFormat));
-        $this->assertEquals($nestedPathResult, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
-        $this->assertEquals($nestedPathResult, genDiff($pathToNestedFile3, $pathToNestedFile4, $stylishFormat));
+        $this->assertEquals($nestedResult, genDiff($pathToNestedFile1, $pathToNestedFile4, $stylishFormat));
+        $this->assertEquals($nestedResult, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
+        $this->assertEquals($nestedResult, genDiff($pathToNestedFile3, $pathToNestedFile4, $stylishFormat));
 
         $pathToFlatFile1 = __DIR__ . '/fixtures/file1.json';
         $pathToFlatFile2 = __DIR__ . '/fixtures/file2.json';
-        $flatPathResult =  file_get_contents(__DIR__ . '/fixtures/resultStylish3.txt');
-        $this->assertEquals($flatPathResult, genDiff($pathToFlatFile1, $pathToFlatFile2, $stylishFormat));
+        $flatResult =  file_get_contents(__DIR__ . '/fixtures/resultStylish3.txt');
+        $this->assertEquals($flatResult, genDiff($pathToFlatFile1, $pathToFlatFile2, $stylishFormat));
 
-        $plainPathResult =  file_get_contents(__DIR__ . '/fixtures/resultPlain.txt');
-        $this->assertEquals($plainPathResult, genDiff($pathToNestedFile1, $pathToNestedFile2, 'plain'));
+        $plainResult =  file_get_contents(__DIR__ . '/fixtures/resultPlain.txt');
+        $this->assertEquals($plainResult, genDiff($pathToNestedFile1, $pathToNestedFile2, $plainFormat));
 
+        $jsonResult = file_get_contents(__DIR__ . '/fixtures/resultJson.json');
+        $this->assertEquals($jsonResult, genDiff($pathToNestedFile1, $pathToNestedFile2, $jsonFormat));
 
         $result1 = [
             'status'=> 'root',

@@ -28,6 +28,7 @@
             "src/Parser.php",
             "src/formatters/Stylish.php",
             "src/formatters/Plain.php",
+            "src/formatters/Json.php",
             "src/Formatters.php"
         ]
     }
