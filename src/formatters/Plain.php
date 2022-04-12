@@ -2,7 +2,6 @@
 
 namespace App\Formater\Plain;
 
-use http\Header\Parser;
 use function Functional\pick;
 
 function plain($diff)
@@ -53,7 +52,7 @@ function iter($node, $ansentry = '')
     }
 }
 
-function stringify($value)
+function stringify($value): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
