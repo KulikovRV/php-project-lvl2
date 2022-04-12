@@ -1,6 +1,7 @@
 #!/usr/bin/env php
-
 <?php
+
+use function App\Differ\genDiff;
 
 $autoloadPath1 = __DIR__ . '/../../../autoload.php';
 $autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
@@ -9,10 +10,6 @@ if (file_exists($autoloadPath1)) {
 } else {
     require_once $autoloadPath2;
 }
-
-use function App\Differ\genDiff;
-use function App\Formater\Stylish\stylish;
-use function App\Parser\preparationOfFiles;
 
 $doc = <<<DOC
 Generate diff
@@ -34,17 +31,10 @@ $params = array(
     'version' => 'gendiff 1.0',
 );
 $args = Docopt::handle($doc, $params);
-$argsInArr = get_object_vars($args);
-$firstFile = preparationOfFiles($argsInArr['args']['<firstFile>']);
-$secondFile =  preparationOfFiles($argsInArr['args']['<secondFile>']);
 
-$diff = genDiff($firstFile, $secondFile);
-$result = stylish($diff);
+$filePath1 = $args['<firstFile>'];
+$filePath2 = $args['<secondFile>'];
+$format = $args['--format'];
 
-echo "{\n";
-foreach ($result as $k=>$v) {
-    echo " $k" . ': ' . $v . PHP_EOL;
-}
-echo '}';
-
-// echo (json_encode($result, JSON_PRETTY_PRINT));
+$diff = gendiff($filePath1, $filePath2, $format);
+print_r($diff);
