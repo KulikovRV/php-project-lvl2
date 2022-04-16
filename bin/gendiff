@@ -38,4 +38,3 @@ $format = $args['--format'];
 
 $diff = gendiff($filePath1, $filePath2, $format);
 print_r($diff);
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
