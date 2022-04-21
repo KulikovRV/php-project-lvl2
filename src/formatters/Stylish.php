@@ -50,7 +50,7 @@ function iter($node, $depth = 1): string
         case 'modified':
             $formattedValue1 = stringify($oldValue);
             $formattedValue2 = stringify($newValue);
-            var_dump($oldValue);
+
             if ($formattedValue1 === '') {
                 $lines =  [
                     "$space- {$node['key']}:{$formattedValue1}",
@@ -69,7 +69,7 @@ function iter($node, $depth = 1): string
     }
 }
 
-function stringify(mixed $value, int $depth = 1): string
+function stringify2(mixed $value, int $depth = 1): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
@@ -100,7 +100,7 @@ function stringify(mixed $value, int $depth = 1): string
     return $result;
 }
 
-function stringify2($diff): string
+function stringify($diff): string
 {
     if (is_bool($diff)) {
         return $diff ? 'true' : 'false';
