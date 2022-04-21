@@ -24,10 +24,8 @@ class DiffTest extends TestCase
         $this->assertEquals($nestedResult, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
         $this->assertEquals($nestedResult, genDiff($pathToNestedFile3, $pathToNestedFile4, $stylishFormat));
 
-        $pathToFlatFile1 = __DIR__ . '/fixtures/file1.json';
-        $pathToFlatFile2 = __DIR__ . '/fixtures/file2.json';
-        $expectedFlat =  file_get_contents(__DIR__ . '/fixtures/resultStylish3.txt');
-        $this->assertEquals($expectedFlat, genDiff($pathToFlatFile1, $pathToFlatFile2, $stylishFormat));
+        $expectedNested =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
+        $this->assertEquals($expectedNested, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
 
         $expectedPlain =  file_get_contents(__DIR__ . '/fixtures/resultPlain.txt');
         $this->assertEquals($expectedPlain, genDiff($pathToNestedFile1, $pathToNestedFile2, $plainFormat));
