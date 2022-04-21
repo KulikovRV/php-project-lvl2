@@ -3,8 +3,7 @@
 namespace App\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function App\Differ\genDiff;
-use function App\Parser\preparationOfFiles;
+use function Differ\Differ\genDiff;
 
 class DiffTest extends TestCase
 {

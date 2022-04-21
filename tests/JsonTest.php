@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Differ\Tests;
+namespace Differ\Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function App\Differ\genDiff;
+use function Differ\Differ\genDiff;
 
 class JsonTest extends TestCase
 {
