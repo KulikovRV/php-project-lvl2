@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Differ;
+namespace Differ\Differ;
 
 use function Functional\sort;
 use function App\Parser\preparationOfFiles;
