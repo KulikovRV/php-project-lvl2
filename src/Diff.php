@@ -6,7 +6,7 @@ use function Functional\sort;
 use function App\Parser\preparationOfFiles;
 use function App\Formatters\getFormatter;
 
-function genDiff($file1, $file2, $format = "stylish"): string
+function genDiff(string $file1, string $file2, string $format = "stylish"): string
 {
     $data1 = preparationOfFiles($file1);
     $data2 = preparationOfFiles($file2);
@@ -14,7 +14,7 @@ function genDiff($file1, $file2, $format = "stylish"): string
     return getFormatter($diff, $format);
 }
 
-function buildTree($data1, $data2)
+function buildTree(array $data1, array $data2)
 {
     return [
         'status' => 'root',
@@ -22,7 +22,7 @@ function buildTree($data1, $data2)
     ];
 }
 
-function iter($array1, $array2): array
+function iter(array $array1, array $array2): array
 {
     $array1Keys = array_keys($array1);
     $array2Keys = array_keys($array2);
