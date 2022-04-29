@@ -13,7 +13,7 @@ function iter(array $node, string $ansentry = '')
 {
     $children = null;
 
-    if (isset($node['status']) && in_array($node['status'], ['root', 'nested'], $strict = false)) {
+    if (isset($node['status']) && in_array($node['status'], ['root', 'nested'], false)) {
         $children = pick($node, 'value');
     }
 
