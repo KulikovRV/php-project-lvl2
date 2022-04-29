@@ -6,8 +6,7 @@ use Symfony\Component\Yaml\Yaml;
 
 function preparationOfFiles(string $pathToFile)
 {
-    $pathPartsFile = pathinfo($pathToFile);
-    $extension = $pathPartsFile['extension'];
+    $extension = pathinfo($pathToFile, PATHINFO_EXTENSION);
     $content = file_get_contents($pathToFile, true);
     $data = '';
 
