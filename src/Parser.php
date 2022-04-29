@@ -10,13 +10,10 @@ function preparationOfFiles(string $pathToFile)
     $content = file_get_contents($pathToFile, true);
     $data = '';
 
-    switch ($extension) {
-        case $extension === 'json':
-            return json_decode($content, associative: true);
-        case $extension === 'yml':
-        case $extension === 'yaml':
-            return Yaml::parse($content);
-    }
+    return match ($extension) {
+        'json' => json_decode($content, associative: true),
+        'yml', 'yaml' => Yaml::parse($content),
+        default => $data,
+    };
 
-    return $data;
 }
