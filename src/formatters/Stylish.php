@@ -8,12 +8,12 @@ use function Functional\pick;
  * @throws \JsonException
  */
 
-function stylish($diff)
+function stylish(array $diff)
 {
     return iter($diff);
 }
 
-function iter($node, $depth = 1): string
+function iter(array $node, int $depth = 1): string
 {
     $children = pick($node, 'value');
 
@@ -95,7 +95,7 @@ function stringify(mixed $value, int $depth = 1): string
     return $result;
 }
 
-function toString($value): string
+function toString(mixed $value): string
 {
     return trim(var_export($value, true), "'");
 }

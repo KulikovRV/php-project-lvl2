@@ -4,7 +4,7 @@ namespace App\Parser;
 
 use Symfony\Component\Yaml\Yaml;
 
-function preparationOfFiles($pathToFile)
+function preparationOfFiles(string $pathToFile)
 {
     $pathPartsFile = pathinfo($pathToFile);
     $extension = $pathPartsFile['extension'];

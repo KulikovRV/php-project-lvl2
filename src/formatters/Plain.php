@@ -4,16 +4,16 @@ namespace App\Formater\Plain;
 
 use function Functional\pick;
 
-function plain($diff)
+function plain(array $diff)
 {
     return iter($diff);
 }
 
-function iter($node, $ansentry = '')
+function iter(array $node, string $ansentry = '')
 {
     $children = null;
 
-    if (isset($node['status']) && in_array($node['status'], ['root', 'nested'])) {
+    if (isset($node['status']) && in_array($node['status'], ['root', 'nested'], $strict = false)) {
         $children = pick($node, 'value');
     }
 
@@ -27,8 +27,7 @@ function iter($node, $ansentry = '')
                 fn($child) => iter($child),
                 $children
             );
-            $result = implode("\n", $mapped);
-            return (string)($result);
+            return implode("\n", $mapped);
         case 'nested':
             $mapped = array_map(
                 fn($child) => iter($child, "$ansentry{$node['key']}."),
@@ -52,7 +51,7 @@ function iter($node, $ansentry = '')
     }
 }
 
-function stringify($value): string
+function stringify(mixed $value): string
 {
     if (is_bool($value)) {
         return $value ? 'true' : 'false';
@@ -63,7 +62,7 @@ function stringify($value): string
     }
 
     if (is_numeric($value)) {
-        return is_array($value) ? "[complex value]" : (string)$value;
+        return $value;
     }
     return is_array($value) ? "[complex value]" : "'$value'";
 }
