@@ -15,5 +15,4 @@ function preparationOfFiles(string $pathToFile)
         'yml', 'yaml' => Yaml::parse($content),
         default => $data,
     };
-
 }
