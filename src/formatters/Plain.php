@@ -11,11 +11,7 @@ function plain(array $diff)
 
 function iter(array $node, string $ansentry = '')
 {
-    $children = null;
-
-    if (isset($node['status']) && in_array($node['status'], ['root', 'nested'], true)) {
-        $children = pick($node, 'value');
-    }
+    $children = pick($node, 'value');
 
     $oldValue = pick($node, 'old value');
     $newValue = pick($node, 'new value');
