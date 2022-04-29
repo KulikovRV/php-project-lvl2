@@ -62,5 +62,8 @@ function stringify($value): string
         return 'null';
     }
 
+    if (is_numeric($value)) {
+        return is_array($value) ? "[complex value]" : (string)$value;
+    }
     return is_array($value) ? "[complex value]" : "'$value'";
 }
