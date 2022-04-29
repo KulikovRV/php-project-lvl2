@@ -6,7 +6,7 @@ use function Functional\sort;
 use function App\Parser\preparationOfFiles;
 use function App\Formatters\getFormatter;
 
-function genDiff($file1, $file2, $format = "json"): string
+function genDiff($file1, $file2, $format = "stylish"): string
 {
     $data1 = preparationOfFiles($file1);
     $data2 = preparationOfFiles($file2);
