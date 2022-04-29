@@ -53,7 +53,7 @@ function iter($node, $depth = 1): string
 
             if ($formattedValue1 === '') {
                 $lines =  [
-                    "$space- {$node['key']}:{$formattedValue1}",
+                    "$space- {$node['key']}: {$formattedValue1}",
                     "$space+ {$node['key']}: {$formattedValue2}"
                 ];
             } else {
