@@ -8,27 +8,36 @@ use function Differ\Differ\genDiff;
 
 class DifferTest extends TestCase
 {
-    public function testDiffer(): void
+    public function gendiffProvider()
     {
-        $stylishFormat = 'stylish';
-        $plainFormat = 'plain';
-        $jsonFormat = 'json';
-
-        $pathToNestedFile1 = __DIR__ . "/fixtures/file-1-nested.json";
-        $pathToNestedFile2 = __DIR__ . "/fixtures/file-2-nested.json";
-        $pathToNestedFile3 = __DIR__ . "/fixtures/file-3-nested.yml";
-        $pathToNestedFile4 = __DIR__ . "/fixtures/file-4-nested.yaml";
-
-        $expectedNested =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
-        $this->assertEquals($expectedNested, genDiff($pathToNestedFile1, $pathToNestedFile4, $stylishFormat));
-        $this->assertEquals($expectedNested, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
-        $this->assertEquals($expectedNested, genDiff($pathToNestedFile3, $pathToNestedFile4, $stylishFormat));
-        $this->assertEquals($expectedNested, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
-
+        $expectedStylish =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
         $expectedPlain =  file_get_contents(__DIR__ . '/fixtures/resultPlain.txt');
-        $this->assertEquals($expectedPlain, genDiff($pathToNestedFile1, $pathToNestedFile2, $plainFormat));
-
         $expectedJson = file_get_contents(__DIR__ . '/fixtures/resultJson.json');
-        $this->assertEquals($expectedJson, genDiff($pathToNestedFile1, $pathToNestedFile2, $jsonFormat));
+
+        $pathBeforeJson = __DIR__ . "/fixtures/before.json";
+        $pathAfterJson = __DIR__ . "/fixtures/after.json";
+        $pathBeforeYml = __DIR__ . "/fixtures/before.yml";
+        $pathAfterYaml = __DIR__ . "/fixtures/after.yaml";
+
+        return [
+            'Json with Json stylish format' => [$expectedStylish, $pathBeforeJson, $pathAfterJson, 'stylish'],
+            'Json with Yaml stylish format' => [$expectedStylish, $pathBeforeJson, $pathAfterYaml, 'stylish'],
+            'Yml with Yaml stylish format' => [$expectedStylish, $pathBeforeYml, $pathAfterYaml, 'stylish'],
+            'Json with Json plain format' => [$expectedPlain, $pathBeforeJson, $pathAfterJson, 'plain'],
+            'Json with Yaml plain format' => [$expectedPlain, $pathBeforeJson, $pathAfterYaml, 'plain'],
+            'Yml with Yaml plain format' => [$expectedPlain, $pathBeforeYml, $pathAfterYaml, 'plain'],
+            'Json with Json json format' => [$expectedJson, $pathBeforeJson, $pathAfterJson, 'json'],
+            'Json with Yaml json format' => [$expectedJson, $pathBeforeJson, $pathAfterYaml, 'json'],
+            'Yml with Yaml json format' => [$expectedJson, $pathBeforeYml, $pathAfterYaml, 'json']
+        ];
+    }
+
+    /**
+     * @dataProvider gendiffProvider
+     */
+        public function testDiffer($expected, $path1, $path2, $format)
+    {
+        $diff = genDiff($path1, $path2, $format);
+        $this->assertEquals($expected, $diff, $format);
     }
 }
