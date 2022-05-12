@@ -1,7 +1,0 @@
-{
-  "host": "code-basics.com",
-  "timeout": 50,
-  "proxy": "123.234.53.24",
-  "follow": true,
-  "state": 777
-}
