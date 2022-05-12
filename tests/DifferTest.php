@@ -6,9 +6,9 @@ use PHPUnit\Framework\TestCase;
 
 use function Differ\Differ\genDiff;
 
-class DiffTest extends TestCase
+class DifferTest extends TestCase
 {
-    public function testDiff(): void
+    public function testDiffer(): void
     {
         $stylishFormat = 'stylish';
         $plainFormat = 'plain';
@@ -18,13 +18,11 @@ class DiffTest extends TestCase
         $pathToNestedFile2 = __DIR__ . "/fixtures/file-2-nested.json";
         $pathToNestedFile3 = __DIR__ . "/fixtures/file-3-nested.yml";
         $pathToNestedFile4 = __DIR__ . "/fixtures/file-4-nested.yaml";
-        $nestedResult =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
-
-        $this->assertEquals($nestedResult, genDiff($pathToNestedFile1, $pathToNestedFile4, $stylishFormat));
-        $this->assertEquals($nestedResult, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
-        $this->assertEquals($nestedResult, genDiff($pathToNestedFile3, $pathToNestedFile4, $stylishFormat));
 
         $expectedNested =  file_get_contents(__DIR__ . '/fixtures/resultStylish.txt');
+        $this->assertEquals($expectedNested, genDiff($pathToNestedFile1, $pathToNestedFile4, $stylishFormat));
+        $this->assertEquals($expectedNested, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
+        $this->assertEquals($expectedNested, genDiff($pathToNestedFile3, $pathToNestedFile4, $stylishFormat));
         $this->assertEquals($expectedNested, genDiff($pathToNestedFile1, $pathToNestedFile2, $stylishFormat));
 
         $expectedPlain =  file_get_contents(__DIR__ . '/fixtures/resultPlain.txt');
