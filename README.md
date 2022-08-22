@@ -5,8 +5,7 @@
 - [![Actions Status](https://github.com/KulikovRV/php-project-lvl2/workflows/hexlet-check/badge.svg)](https://github.com/KulikovRV/php-project-lvl2/actions)
 - [![PHP CI](https://github.com/KulikovRV/php-project-lvl2/actions/workflows/workflow.yml/badge.svg)](https://github.com/KulikovRV/php-project-lvl2/actions/workflows/workflow.yml)
 
-Diff generator is the second project of the "Php developer" Hexlet learning platform.
-Is a program that determines the difference between two data structures
+Diff generator is a program that determines the difference between two data structures
 
 Utility features:
 - Support for different input formats: yaml and json
